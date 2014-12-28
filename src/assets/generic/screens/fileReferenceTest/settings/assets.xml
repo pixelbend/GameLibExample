@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package name="_game__fileReferenceTestScreen">
+    <package name="graphics">
+        <swf 		name="background"	url="screens/fileReferenceTest/graphics/background.swf" />
+    </package>
+</package>

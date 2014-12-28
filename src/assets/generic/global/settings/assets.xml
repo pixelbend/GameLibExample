@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package name="global">
+	<package name="xml">
+		<xml 		name="localeTexts"	url="global/xml/locale.xml"/>
+        <xml 		name="popupLogic"	url="global/xml/popups.xml"/>
+	</package>
+</package>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package name="_game__tweenTestScreen">
+	<package name="graphics">
+		<swf 		name="tweenGraphics"	url="screens/tweenTest/graphics/tweenGraphics.swf"/>
+	</package>
+</package>

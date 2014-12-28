@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localeTexts>
+	<locale name="en">
+        <!-- Common texts -->
+        <module name="common">
+            <text name="back"><![CDATA[Back]]></text>
+        </module>
+        <!-- Transition texts -->
+        <module name="transition">
+            <text name="loading"><![CDATA[Loading]]></text>
+        </module>
+        <!-- Intro screen texts -->
+		<module name="_game__introScreen">
+			<text name="title"><![CDATA[HELLO WORLD!]]></text>
+            <text name="subTitle"><![CDATA[Press any of the buttons to start]]></text>
+            <text name="_game__soundTestScreen"><![CDATA[Sound test]]></text>
+            <text name="_game__soundQueueTestScreen"><![CDATA[Sound queue test]]></text>
+            <text name="_game__fileReferenceTestScreen"><![CDATA[File reference test]]></text>
+            <text name="_game__tweenTestScreen"><![CDATA[Tween test]]></text>
+            <text name="_game__popupTestScreen"><![CDATA[Popup test]]></text>
+            <text name="_game__localeTestScreen"><![CDATA[Locale test]]></text>
+		</module>
+        <!-- Sound test screen texts -->
+        <module name="_game__soundTestScreen">
+            <text name="title"><![CDATA[SOUND CHECK]]></text>
+            <text name="playVoice0"><![CDATA[Play voice 0 with priority 0]]></text>
+            <text name="playVoice1"><![CDATA[Play voice 1 with priority 1]]></text>
+            <text name="playSFX0"><![CDATA[Play SFX 1 with priority 1]]></text>
+            <text name="playSFX1"><![CDATA[Play SFX 1 with priority 1]]></text>
+            <text name="playAmbiance"><![CDATA[Play ambiance]]></text>
+            <text name="pauseVoice"><![CDATA[Pause current sound on voice channel]]></text>
+            <text name="pauseSFX"><![CDATA[Pause current sound on SFX channel]]></text>
+            <text name="pauseAmbiance"><![CDATA[Pause current sound on ambiance channel]]></text>
+            <text name="resumeVoice"><![CDATA[Resume current sound on voice channel]]></text>
+            <text name="resumeSFX"><![CDATA[Resume current sound on SFX channel]]></text>
+            <text name="resumeAmbiance"><![CDATA[Resume current sound on ambiance channel]]></text>
+            <text name="stopVoice"><![CDATA[Stop current sound on voice channel]]></text>
+            <text name="stopSFX"><![CDATA[Stop current sound on SFX channel]]></text>
+            <text name="stopAmbiance"><![CDATA[Stop current sound on ambiance channel]]></text>
+            <text name="stopAll"><![CDATA[Stop all channels]]></text>
+        </module>
+        <!-- Sound queue test screen texts -->
+        <module name="_game__soundQueueTestScreen">
+            <text name="title"><![CDATA[SOUND QUEUE CHECK]]></text>
+            <text name="startQueueOnVoice"><![CDATA[Start queue on voice channel]]></text>
+            <text name="pauseQueueOnVoice"><![CDATA[Pause queue on voice channel]]></text>
+            <text name="resumeQueueOnVoice"><![CDATA[Resume queue on voice channel]]></text>
+            <text name="stopQueueOnVoice"><![CDATA[Stop queue on voice channel]]></text>
+            <text name="startQueueOnSFX"><![CDATA[Start queue on SFX channel]]></text>
+            <text name="pauseQueueOnSFX"><![CDATA[Pause queue on SFX channel]]></text>
+            <text name="resumeQueueOnSFX"><![CDATA[Resume queue on SFX channel]]></text>
+            <text name="stopQueueOnSFX"><![CDATA[Stop queue on SFX channel]]></text>
+        </module>
+        <!-- File reference test screen texts -->
+        <module name="_game__fileReferenceTestScreen">
+            <text name="title"><![CDATA[FILE REFERENCE]]></text>
+        </module>
+        <!-- Tween test screen texts -->
+        <module name="_game__tweenTestScreen">
+            <text name="title"><![CDATA[TWEEN]]></text>
+            <text name="startMoveTween"><![CDATA[Start move tween]]></text>
+            <text name="pauseMoveTween"><![CDATA[Pause move tween]]></text>
+            <text name="resumeMoveTween"><![CDATA[Resume move tween]]></text>
+            <text name="stopMoveTween"><![CDATA[Stop move tween]]></text>
+            <text name="startScaleTween"><![CDATA[Start scale tween]]></text>
+            <text name="pauseScaleTween"><![CDATA[Pause scale tween]]></text>
+            <text name="resumeScaleTween"><![CDATA[Resume scale tween]]></text>
+            <text name="stopScaleTween"><![CDATA[Stop scale tween]]></text>
+            <text name="resetTarget"><![CDATA[Reset target]]></text>
+        </module>
+        <!-- Tween test screen texts -->
+        <module name="_game__popupTestScreen">
+            <text name="title"><![CDATA[POPUP]]></text>
+            <text name="openTestPopup"><![CDATA[Open test popup]]></text>
+            <text name="switchStackPopups"><![CDATA[Switch stack popups]]></text>
+            <text name="switchTranslucentLayerEnabled"><![CDATA[Switch popup translucent layer enabled]]></text>
+            <text name="changeTranslucentLayerAlpha"><![CDATA[Change popup translucent layer alpha]]></text>
+            <text name="changeTranslucentLayerColor"><![CDATA[Change popup translucent layer color]]></text>
+
+            <text name="stackPopups"><![CDATA[Stack popups enabled: ]]></text>
+            <text name="translucentLayerEnabled"><![CDATA[Translucent layer enabled: ]]></text>
+            <text name="translucentLayerColor"><![CDATA[Translucent layer color: ]]></text>
+            <text name="translucentLayerAlpha"><![CDATA[Translucent layer alpha: ]]></text>
+        </module>
+        <!-- Locale test screen texts -->
+        <module name="_game__localeTestScreen">
+            <text name="title"><![CDATA[Language]]></text>
+            <text name="currentLanguage"><![CDATA[Current language: ]]></text>
+            <text name="changeLanguage"><![CDATA[Change language]]></text>
+        </module>
+        <!-- Open other popup texts -->
+        <module name="_game__firstPopup">
+            <text name="title"><![CDATA[First popup]]></text>
+            <text name="openSecondPopup"><![CDATA[Open second popup]]></text>
+        </module>
+        <!-- Test popup texts -->
+        <module name="_game__secondPopup">
+            <text name="title"><![CDATA[Second popup]]></text>
+        </module>
+	</locale>
+    <locale name="fr">
+        <!-- Locale test screen texts -->
+        <module name="_game__localeTestScreen">
+            <text name="title"><![CDATA[Langue]]></text>
+            <text name="currentLanguage"><![CDATA[Langue courant: ]]></text>
+            <text name="changeLanguage"><![CDATA[Changer de langue]]></text>
+        </module>
+    </locale>
+</localeTexts>

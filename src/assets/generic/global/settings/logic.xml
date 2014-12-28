@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<logic>
+	<!-- Game screens -->
+	<gameScreens>
+		<gameScreen 	name="_game__introScreen" 	            className="test.screens.intro.IntroScreen" />
+        <gameScreen 	name="_game__soundTestScreen" 	        className="test.screens.soundTest.SoundTestScreen" />
+        <gameScreen 	name="_game__soundQueueTestScreen" 	    className="test.screens.soundQueueTest.SoundQueueTestScreen" />
+        <gameScreen 	name="_game__fileReferenceTestScreen" 	className="test.screens.fileReferenceTest.FileReferenceTestScreen" />
+        <gameScreen 	name="_game__tweenTestScreen" 	        className="test.screens.tweenTest.TweenTestScreen" />
+        <gameScreen 	name="_game__popupTestScreen" 	        className="test.screens.popupTest.PopupTestScreen" />
+        <gameScreen     name="_game__localeTestScreen"          className="test.screens.localeTest.LocaleTestScreen" />
+	</gameScreens>
+    <!-- Popups -->
+    <popups>
+        <popup      name="_game__secondPopup"       className="test.popups.TestPopup" />
+        <popup      name="_game__firstPopup"        className="test.popups.FirstPopup" />
+    </popups>
+    <!-- Transitions -->
+    <transitions>
+        <transition name="testIntro" 	className="test.transition.IntroTransition" />
+        <transition name="testLoop" 	className="test.transition.LoopTransition" />
+        <transition name="testOutro" 	className="test.transition.OutroTransition" />
+    </transitions>
+    <!-- Transition sequences -->
+    <transitionSequences>
+        <transitionSequence name="testTransitionSequence">
+            <transition name="testIntro"/>
+            <transition name="testLoop"/>
+            <transition name="testOutro"/>
+        </transitionSequence>
+    </transitionSequences>
+	<!-- Game components configuration -->
+	<configurations>
+        <!-- Asset proxy configuration -->
+		<configuration name="_game__assetProxy">
+			<setGenericPath value="assets/generic/" />
+			<setLocalePath 	value="assets/locale/" />
+		</configuration>
+	</configurations>
+</logic>

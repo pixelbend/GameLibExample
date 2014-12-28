@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package name="_game__soundTestScreen">
+    <package name="sounds">
+        <sound 		name="voice0"	url="screens/soundTest/sounds/voice0.mp3"/>
+        <sound 		name="voice1"	url="screens/soundTest/sounds/voice1.mp3"/>
+        <sound 		name="ambiance"	url="screens/soundTest/sounds/ambiance.mp3"/>
+        <sound 		name="sfx0"	    url="screens/soundTest/sounds/sfx0.mp3"/>
+        <sound 		name="sfx1"	    url="screens/soundTest/sounds/sfx1.mp3"/>
+    </package>
+</package>

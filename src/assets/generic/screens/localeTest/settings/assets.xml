@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package name="_game__localeTestScreen">
+    <package name="graphics" type="locale">
+        <swf    name="picture"	url="screens/localeTest/graphics/picture.png" />
+    </package>
+</package>
