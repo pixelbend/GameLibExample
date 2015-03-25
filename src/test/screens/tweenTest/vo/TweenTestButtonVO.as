@@ -2,6 +2,8 @@ package test.screens.tweenTest.vo
 {
 	import com.pixelBender.model.vo.game.GameSizeVO;
 
+	import constants.Constants;
+
 	import test.screens.common.vo.IButtonDataVO;
 
 	public class TweenTestButtonVO implements IButtonDataVO
@@ -13,6 +15,7 @@ package test.screens.tweenTest.vo
 		private var textID												:String;
 		private var commandName											:String;
 		private var tweenName											:String;
+		private var buttonGraphics										:String;
 		private var duration											:int;
 		private var tweenProperties										:Object;
 		private var needsUpdating										:Boolean;
@@ -21,12 +24,13 @@ package test.screens.tweenTest.vo
 		// MEMBERS
 		//==============================================================================================================
 
-		public function TweenTestButtonVO(textID:String, commandName:String, tweenName:String, duration:int,
-										  	tweenProperties:Object, needsUpdating:Boolean)
+		public function TweenTestButtonVO(textID:String, commandName:String, tweenName:String, buttonGraphics:String,
+										  	duration:int, tweenProperties:Object, needsUpdating:Boolean)
 		{
 			this.textID = textID;
 			this.commandName = commandName;
 			this.tweenName = tweenName;
+			this.buttonGraphics = (buttonGraphics.length > 0) ? buttonGraphics: Constants.SIMPLE_BUTTON_GRAPHICS;
 			this.duration = duration;
 			this.tweenProperties = tweenProperties;
 			this.needsUpdating = needsUpdating;
@@ -60,6 +64,11 @@ package test.screens.tweenTest.vo
 		public function getTextID():String
 		{
 			return textID;
+		}
+
+		public function getButtonGraphics():String
+		{
+			return buttonGraphics;
 		}
 
 		public function getCommandName():String

@@ -37,6 +37,7 @@ package test.screens.tweenTest
 											String(buttonDataXML.@textID),
 											String(buttonDataXML.@commandName),
 											String(buttonDataXML.@tweenName),
+											String(buttonDataXML.@buttonGraphicsLinkage),
 											parseInt(String(buttonDataXML.@duration)),
 											tweenProperties,
 											String(buttonDataXML.@needsUpdating) == "true"

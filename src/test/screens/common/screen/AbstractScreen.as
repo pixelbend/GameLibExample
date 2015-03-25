@@ -1,5 +1,6 @@
 package test.screens.common.screen
 {
+	import com.pixelBender.helpers.DictionaryHelpers;
 	import com.pixelBender.helpers.IRunnableHelpers;
 	import com.pixelBender.helpers.LocalizationHelpers;
 	import com.pixelBender.helpers.StarlingHelpers;
@@ -10,6 +11,8 @@ package test.screens.common.screen
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;
 	import flash.geom.Rectangle;
+	import flash.system.ApplicationDomain;
+	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
 	import org.puremvc.as3.interfaces.INotification;
 	import starling.display.DisplayObjectContainer;
@@ -46,7 +49,7 @@ package test.screens.common.screen
 		/**
 		 * Button textures
 		 */
-		protected var buttonTextures												:Vector.<Texture>;
+		protected var buttonTextures												:Dictionary;
 
 		//==============================================================================================================
 		// CONSTRUCTOR
@@ -100,11 +103,16 @@ package test.screens.common.screen
 			starlingGameScreen = null;
 			if (buttonTextures != null)
 			{
-				for (var i:int=0; i<buttonTextures.length; i++)
+				for (var key:String in buttonTextures)
 				{
-					buttonTextures[i].dispose();
-					buttonTextures[i] = null;
+					var buttonTexturesPair:Vector.<Texture> = buttonTextures[key];
+					for (var i:int=0; i<buttonTexturesPair.length; i++)
+					{
+						buttonTexturesPair[i].dispose();
+						buttonTexturesPair[i] = null;
+					}
 				}
+				DictionaryHelpers.deleteValues(buttonTextures);
 				buttonTextures = null;
 			}
 		}
@@ -160,41 +168,8 @@ package test.screens.common.screen
 					buttonVerticalGap:int = buttonHeight * layout.getVerticalGap(),
 					startX:int = starlingGameScreen.stage.stageWidth * layout.getStartX(),
 					startY:int = starlingGameScreen.stage.stageHeight * layout.getStartY(),
-					buttonLength:int = buttonData.length;
-
-			// Internals
-			var buttonGraphics:MovieClip,
-				originalButtonBitmapData:BitmapData,
-				originalButtonBitmap:ScaleBitmap,
-				bitmapData:BitmapData,
-				scale9Grid:Rectangle,
-				buttonTextBounds:Rectangle = new Rectangle();
-
-			if (buttonTextures == null)
-			{
-				buttonGraphics = new buttonLinkage();
-				scale9Grid = new Rectangle();
-				buttonTextures = new Vector.<Texture>(2, true);
-
-				// Compute vector scale 9 grid rect
-				scale9Grid.x = buttonGraphics.width * 0.1;
-				scale9Grid.y = buttonGraphics.height * 0.1;
-				scale9Grid.width = buttonGraphics.width * 0.8;
-				scale9Grid.height = buttonGraphics.height * 0.8;
-
-				for (var j:int=0; j<2; j++)
-				{
-					buttonGraphics.gotoAndStop(j+1);
-					originalButtonBitmapData = new BitmapData(buttonGraphics.width, buttonGraphics.height, true, 0x0);
-					originalButtonBitmapData.draw(buttonGraphics, null, null, null, null, true);
-					originalButtonBitmap = new ScaleBitmap(originalButtonBitmapData, "auto", true);
-					originalButtonBitmap.scale9Grid = scale9Grid;
-					originalButtonBitmap.setSize(buttonWidth, buttonHeight);
-					bitmapData = new BitmapData(buttonWidth, buttonHeight, true, 0x00000000);
-					bitmapData.draw(originalButtonBitmap, null, null, null, null, true);
-					buttonTextures[j] = Texture.fromBitmapData(bitmapData, false);
-				}
-			}
+					buttonLength:int = buttonData.length,
+					buttonTextBounds:Rectangle = new Rectangle();
 
 			// Compute text bounds
 			buttonTextBounds.x = buttonWidth * 0.15;
@@ -209,11 +184,12 @@ package test.screens.common.screen
 			for (var i:int=0; i<buttonLength; i++)
 			{
 				var buttonRow:int = i / buttonsPerRow,
-					buttonColumn:int = i % buttonsPerRow;
+					buttonColumn:int = i % buttonsPerRow,
+					textures:Vector.<Texture> = getButtonTexturePair(buttonData[i].getButtonGraphics(), buttonWidth, buttonHeight);
 				testButtons[i] = new ButtonView(mediatorName, buttonData[i]);
 				testButtons[i].createButton(starlingGameScreen,
-												buttonTextures[0],
-												buttonTextures[1],
+												textures[0],
+												textures[1],
 												LocalizationHelpers.getLocalizedText(mediatorName, buttonData[i].getTextID()),
 												buttonTextBounds,
 												(startX + buttonColumn * (buttonWidth + buttonHorizontalGap)),
@@ -221,6 +197,56 @@ package test.screens.common.screen
 												buttonFontSize,
 												0x333333);
 			}
+		}
+
+		protected function getButtonTexturePair(buttonGraphicsLinkage:String, buttonWidth:int, buttonHeight:int):Vector.<Texture>
+		{
+			// Internals
+			var buttonClass:Class,
+				buttonGraphics:MovieClip,
+				originalButtonBitmapData:BitmapData,
+				originalButtonBitmap:ScaleBitmap,
+				bitmapData:BitmapData,
+				scale9Grid:Rectangle,
+				buttonTexturesPair:Vector.<Texture>;
+
+
+			if (buttonTextures == null)
+			{
+				buttonTextures = new Dictionary();
+			}
+
+			if (buttonTextures[buttonGraphicsLinkage])
+			{
+				return buttonTextures[buttonGraphicsLinkage];
+			}
+
+			buttonClass = ApplicationDomain.currentDomain.getDefinition(buttonGraphicsLinkage) as Class;
+			buttonGraphics = new buttonClass();
+			scale9Grid = new Rectangle();
+			buttonTexturesPair = new Vector.<Texture>(2, true);
+
+			// Compute vector scale 9 grid rect
+			scale9Grid.x = buttonGraphics.width * 0.1;
+			scale9Grid.y = buttonGraphics.height * 0.1;
+			scale9Grid.width = buttonGraphics.width * 0.8;
+			scale9Grid.height = buttonGraphics.height * 0.8;
+
+			for (var j:int=0; j<buttonTexturesPair.length; j++)
+			{
+				buttonGraphics.gotoAndStop(j+1);
+				originalButtonBitmapData = new BitmapData(buttonGraphics.width, buttonGraphics.height, true, 0x0);
+				originalButtonBitmapData.draw(buttonGraphics, null, null, null, null, true);
+				originalButtonBitmap = new ScaleBitmap(originalButtonBitmapData, "auto", true);
+				originalButtonBitmap.scale9Grid = scale9Grid;
+				originalButtonBitmap.setSize(buttonWidth, buttonHeight);
+				bitmapData = new BitmapData(buttonWidth, buttonHeight, true, 0x00000000);
+				bitmapData.draw(originalButtonBitmap, null, null, null, null, true);
+				buttonTexturesPair[j] = Texture.fromBitmapData(bitmapData, false);
+			}
+
+			buttonTextures[buttonGraphicsLinkage] = buttonTexturesPair;
+			return buttonTexturesPair;
 		}
 	}
 }

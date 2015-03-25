@@ -63,12 +63,13 @@ package test.screens.soundQueueTest
 			super.resume();
 		}
 
-		override public function dispose():void
+		override public function stop():void
 		{
+			SoundHelpers.stopAllSoundsOnChannels();
 			unregisterDefaultPackageSounds();
 			IRunnableHelpers.dispose(queuePlayers);
 			queuePlayers = null;
-			super.dispose();
+			super.stop();
 		}
 
 		//==============================================================================================================

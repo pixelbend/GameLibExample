@@ -31,5 +31,9 @@ package constants
 		// Popups
 		TestPopup;
 		FirstPopup;
+		// Embedded graphics
+		buttonLinkage;
+		buttonPlayLinkage;
+		backButtonLinkage;
 	}
 }

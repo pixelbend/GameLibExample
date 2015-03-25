@@ -1,5 +1,7 @@
 package test.screens.localeTest.vo
 {
+	import constants.Constants;
+
 	import test.screens.common.vo.IButtonDataVO;
 
 	public class LocaleTestButtonVO implements IButtonDataVO
@@ -33,6 +35,11 @@ package test.screens.localeTest.vo
 		public function getCommandName():String
 		{
 			return commandName;
+		}
+
+		public function getButtonGraphics():String
+		{
+			return Constants.SIMPLE_BUTTON_GRAPHICS;
 		}
 	}
 }

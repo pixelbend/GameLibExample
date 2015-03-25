@@ -1,5 +1,7 @@
 package test.screens.soundTest.vo
 {
+	import constants.Constants;
+
 	import test.screens.common.vo.IButtonDataVO;
 
 	public class SoundTestButtonDataVO implements IButtonDataVO
@@ -62,6 +64,11 @@ package test.screens.soundTest.vo
 		public function getPriority():int
 		{
 			return priority;
+		}
+
+		public function getButtonGraphics():String
+		{
+			return Constants.SIMPLE_BUTTON_GRAPHICS;
 		}
 	}
 }

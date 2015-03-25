@@ -1,5 +1,7 @@
 package test.screens.popupTest.vo
 {
+	import constants.Constants;
+
 	import test.screens.common.vo.IButtonDataVO;
 
 	public class PopupTestButtonVO implements IButtonDataVO
@@ -40,6 +42,11 @@ package test.screens.popupTest.vo
 		public function getPopupName():String
 		{
 			return popupName;
+		}
+
+		public function getButtonGraphics():String
+		{
+			return Constants.SIMPLE_BUTTON_GRAPHICS;
 		}
 	}
 }

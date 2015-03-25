@@ -1,5 +1,7 @@
 package test.screens.intro.vo
 {
+	import constants.Constants;
+
 	import test.screens.common.vo.IButtonDataVO;
 
 	public class IntroButtonDataVO implements IButtonDataVO
@@ -31,6 +33,11 @@ package test.screens.intro.vo
 		public function getTextID():String
 		{
 			return screenName;
+		}
+
+		public function getButtonGraphics():String
+		{
+			return Constants.SIMPLE_BUTTON_GRAPHICS;
 		}
 	}
 }

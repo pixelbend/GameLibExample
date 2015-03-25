@@ -1,5 +1,7 @@
 package test.screens.soundQueueTest.vo
 {
+	import constants.Constants;
+
 	import test.screens.common.vo.IButtonDataVO;
 
 	public class SoundQueueTestButtonVO implements IButtonDataVO
@@ -51,6 +53,11 @@ package test.screens.soundQueueTest.vo
 		public function getSounds():Vector.<String>
 		{
 			return sounds;
+		}
+
+		public function getButtonGraphics():String
+		{
+			return Constants.SIMPLE_BUTTON_GRAPHICS;
 		}
 	}
 }

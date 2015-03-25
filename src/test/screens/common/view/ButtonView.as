@@ -48,10 +48,13 @@ package test.screens.common.view
 			button = new Button(normalButtonTexture, text, downButtonTexture);
 			button.x = x;
 			button.y = y;
-			button.fontName = "Arial";
-			button.fontSize = fontSize;
-			button.fontColor = fontColor;
-			button.textBounds = textBounds;
+			if (text && text.length > 0)
+			{
+				button.fontName = "Arial";
+				button.fontSize = fontSize;
+				button.fontColor = fontColor;
+				button.textBounds = textBounds;
+			}
 			container.addChild(button);
 		}
 
