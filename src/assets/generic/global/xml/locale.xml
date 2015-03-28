@@ -42,14 +42,8 @@
         <!-- Sound queue test screen texts -->
         <module name="_game__soundQueueTestScreen">
             <text name="title"><![CDATA[SOUND QUEUE]]></text>
-            <text name="startQueueOnVoice"><![CDATA[Start queue on voice channel]]></text>
-            <text name="pauseQueueOnVoice"><![CDATA[Pause queue on voice channel]]></text>
-            <text name="resumeQueueOnVoice"><![CDATA[Resume queue on voice channel]]></text>
-            <text name="stopQueueOnVoice"><![CDATA[Stop queue on voice channel]]></text>
-            <text name="startQueueOnSFX"><![CDATA[Start queue on SFX channel]]></text>
-            <text name="pauseQueueOnSFX"><![CDATA[Pause queue on SFX channel]]></text>
-            <text name="resumeQueueOnSFX"><![CDATA[Resume queue on SFX channel]]></text>
-            <text name="stopQueueOnSFX"><![CDATA[Stop queue on SFX channel]]></text>
+            <text name="voiceQueue"><![CDATA[Voice queue]]></text>
+            <text name="sfxQueue"><![CDATA[SFX queue]]></text>
         </module>
         <!-- File reference test screen texts -->
         <module name="_game__fileReferenceTestScreen">

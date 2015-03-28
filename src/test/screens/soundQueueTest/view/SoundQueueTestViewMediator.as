@@ -1,12 +1,14 @@
-package test.screens.tweenTest.view
+package test.screens.soundQueueTest.view
 {
 	import com.pixelBender.helpers.IDisposeHelpers;
 	import com.pixelBender.helpers.IRunnableHelpers;
 	import com.pixelBender.helpers.LocalizationHelpers;
+	import com.pixelBender.helpers.SoundHelpers;
 	import com.pixelBender.helpers.StarlingHelpers;
-	import com.pixelBender.helpers.TweenHelpers;
 	import com.pixelBender.interfaces.IRunnable;
+	import com.pixelBender.model.component.sound.SoundQueuePlayer;
 	import com.pixelBender.model.vo.game.GameSizeVO;
+	import com.pixelBender.model.vo.sound.CompleteQueuePropertiesVO;
 
 	import flash.utils.Dictionary;
 
@@ -20,84 +22,56 @@ package test.screens.tweenTest.view
 
 	import test.screens.common.view.TestButtonView;
 
-	import test.screens.common.vo.TestTitleLayoutVO;
-
 	import test.screens.common.vo.TestButtonLayoutVO;
 	import test.screens.common.vo.TestButtonVO;
-	import test.screens.tweenTest.vo.TweenTestSetupVO;
 
-	public class TweenTestViewMediator extends Mediator implements IRunnable
+	import test.screens.common.vo.TestTitleLayoutVO;
+	import test.screens.soundQueueTest.vo.SoundQueueTestSetupVO;
+
+	public class SoundQueueTestViewMediator extends Mediator implements IRunnable
 	{
 		//==============================================================================================================
 		// CONSTANTS
 		//==============================================================================================================
 
-		protected static const MEDIATOR_NAME						:String = "TweenTestViewMediator";
+		protected static const MEDIATOR_NAME						:String = "_soundQueueTestViewMediator";
 
 		protected static const ACTION_PLAY							:String = "play";
 		protected static const ACTION_PAUSE							:String = "pause";
 		protected static const ACTION_STOP							:String = "stop";
-		protected static const ACTION_RESET							:String = "reset";
 
 		//==============================================================================================================
 		// MEMBERS
 		//==============================================================================================================
 
+		private var name											:TextField;
 		private var container										:Sprite;
-		private var tweenName										:TextField;
 		private var buttons											:Dictionary;
-		private var tweenTarget										:Object;
-		private var tweenProperties									:Object;
-		private var initialProperties								:Object;
-		private var tweenDuration									:int;
-		private var currentTweenID									:int;
+		private var soundQueue										:SoundQueuePlayer;
+
+		private var channelID										:int;
+		private var queueSoundIDs									:Vector.<String>;
 
 		//==============================================================================================================
 		// CONSTRUCTOR
 		//==============================================================================================================
 
-		public function TweenTestViewMediator(parentMediatorName:String, parentContainer:Sprite, gameSize:GameSizeVO,
-											  	titleLayout:TestTitleLayoutVO, buttonLayout:TestButtonLayoutVO,
-													setup:TweenTestSetupVO, buttonTexturesMap:Dictionary, tweenTarget:Object)
+		public function SoundQueueTestViewMediator(parentMediatorName:String, parentContainer:Sprite, gameSize:GameSizeVO,
+												   titleLayout:TestTitleLayoutVO, buttonLayout:TestButtonLayoutVO,
+												   setup:SoundQueueTestSetupVO, buttonTexturesMap:Dictionary)
 		{
-			super(parentMediatorName + MEDIATOR_NAME + setup.getTweenNameTextID());
+			super(parentMediatorName + MEDIATOR_NAME + "_" + setup.getSetupID());
 
-			this.tweenTarget = tweenTarget;
-			this.tweenProperties = setup.getProperties();
-			this.tweenDuration = setup.getDuration();
+			trace(mediatorName);
 
-			initialProperties = {};
-			for (var propertyName:String in tweenProperties)
-			{
-				initialProperties[propertyName] = tweenTarget[propertyName];
-			}
+			channelID = setup.getChannelID();
+			queueSoundIDs = setup.getSoundIDs();
 
 			createContainer(parentContainer, setup, gameSize);
-			createTweenName(parentMediatorName, titleLayout, setup, gameSize);
+			createName(parentMediatorName, titleLayout, setup, gameSize);
 			createButtons(buttonLayout, buttonTexturesMap, gameSize);
 
 			enableButtons(ACTION_PLAY);
-
-			currentTweenID = -1;
-		}
-
-		//==============================================================================================================
-		// Mediator API
-		//==============================================================================================================
-
-		public override function listNotificationInterests():Array
-		{
-			return [mediatorName + TestButtonView.BUTTON_TRIGGERED];
-		}
-
-		public override function handleNotification(notification:INotification):void
-		{
-			switch (notification.getName())
-			{
-				case mediatorName + TestButtonView.BUTTON_TRIGGERED:
-					handleTweenAction(String(notification.getBody()));
-					break;
-			}
 		}
 
 		//==============================================================================================================
@@ -124,94 +98,105 @@ package test.screens.tweenTest.view
 			StarlingHelpers.removeFromParent(container);
 			container = null;
 
-			StarlingHelpers.removeFromParent(tweenName);
-			tweenName = null;
+			StarlingHelpers.removeFromParent(name);
+			name = null;
 
 			IDisposeHelpers.dispose(buttons);
 			buttons = null;
 
-			tweenTarget = null;
-			tweenProperties = null;
-			initialProperties = null;
+			if (soundQueue != null)
+			{
+				soundQueue.dispose();
+				soundQueue = null;
+			}
+
+			queueSoundIDs = null;
+		}
+
+		//==============================================================================================================
+		// Mediator API
+		//==============================================================================================================
+
+		public override function listNotificationInterests():Array
+		{
+			return [mediatorName + TestButtonView.BUTTON_TRIGGERED];
+		}
+
+		public override function handleNotification(notification:INotification):void
+		{
+			switch (notification.getName())
+			{
+				case mediatorName + TestButtonView.BUTTON_TRIGGERED:
+					handleAction(String(notification.getBody()));
+					break;
+			}
 		}
 
 		//==============================================================================================================
 		// HANDLERS
 		//==============================================================================================================
 
-		private function handleTweenAction(actionID:String):void
+		private function handleAction(actionID:String):void
 		{
 			switch(actionID)
 			{
 				case ACTION_PLAY:
-					playTween();
+					playQueue();
 					break;
 				case ACTION_PAUSE:
-					pauseTween();
+					pauseQueue();
 					break;
 				case ACTION_STOP:
-					stopTween();
-					break;
-				case ACTION_RESET:
-					resetProperties();
+					stopQueue();
 					break;
 			}
 		}
 
-		private function handleTweenEnded(tweenID:int):void
+		private function playQueue():void
 		{
-			stopTween();
-		}
-
-		private function playTween():void
-		{
-			if (getIsTweenActive())
+			if (getQueueActive())
 			{
-				TweenHelpers.resumeTween(currentTweenID);
+				soundQueue.resume();
 			}
 			else
 			{
-				resetProperties();
-				currentTweenID = TweenHelpers.tween(tweenTarget, tweenDuration, tweenProperties, handleTweenEnded);
+				soundQueue = SoundHelpers.createQueuePlayer("queue" + channelID, queueSoundIDs, channelID, handleQueueCompleted);
+				soundQueue.play();
 			}
 			enableButtons(ACTION_PAUSE, ACTION_STOP);
 		}
 
-		private function pauseTween():void
+		private function pauseQueue():void
 		{
-			if (getIsTweenActive())
+			if (getQueueActive())
 			{
-				TweenHelpers.pauseTween(currentTweenID);
+				soundQueue.pause();
 				enableButtons(ACTION_PLAY, ACTION_STOP);
 			}
 		}
 
-		private function stopTween():void
+		private function stopQueue():void
 		{
-			if (getIsTweenActive())
+			if (getQueueActive())
 			{
-				TweenHelpers.removeTween(currentTweenID);
-				currentTweenID = -1;
-				enableButtons(ACTION_PLAY, ACTION_RESET);
+				soundQueue.stop();
 			}
+		}
+
+		private function handleQueueCompleted(vo:CompleteQueuePropertiesVO):void
+		{
+			soundQueue.dispose();
+			soundQueue = null;
+			enableButtons(ACTION_PLAY);
 		}
 
 		//==============================================================================================================
 		// LOCALS
 		//==============================================================================================================
 
-		private function getIsTweenActive():Boolean
+		private function getQueueActive():Boolean
 		{
-			return currentTweenID >= 0;
-		}
-
-		private function resetProperties():void
-		{
-			for (var propertyName:String in initialProperties)
-			{
-				tweenTarget[propertyName] = initialProperties[propertyName];
-			}
-			enableButtons(ACTION_PLAY);
+			return soundQueue != null;
 		}
 
 		private function enableButtons(...buttonsToEnable):void
@@ -229,20 +214,20 @@ package test.screens.tweenTest.view
 			}
 		}
 
-		private function createContainer(parentContainer:Sprite, setup:TweenTestSetupVO, gameSize:GameSizeVO):void
+		private function createContainer(parentContainer:Sprite, setup:SoundQueueTestSetupVO, gameSize:GameSizeVO):void
 		{
 			container = new Sprite();
 			parentContainer.addChild(container);
 			container.y = gameSize.getHeight() * setup.getY();
 		}
 
-		private function createTweenName(parentMediatorName:String, titleLayout:TestTitleLayoutVO, setup:TweenTestSetupVO, gameSize:GameSizeVO):void
+		private function createName(parentMediatorName:String, titleLayout:TestTitleLayoutVO, setup:SoundQueueTestSetupVO, gameSize:GameSizeVO):void
 		{
-			tweenName = new TextField(gameSize.getWidth() * titleLayout.getTextWidth(), gameSize.getHeight() * titleLayout.getTextHeight(),
-										LocalizationHelpers.getLocalizedText(parentMediatorName, setup.getTweenNameTextID()),
+			name = new TextField(gameSize.getWidth() * titleLayout.getTextWidth(), gameSize.getHeight() * titleLayout.getTextHeight(),
+										LocalizationHelpers.getLocalizedText(parentMediatorName, setup.getTextID()),
 										"Verdana", 20, 0x000000, true);
-			tweenName.x = gameSize.getWidth() * titleLayout.getX();
-			container.addChild(tweenName);
+			name.x = gameSize.getWidth() * titleLayout.getX();
+			container.addChild(name);
 		}
 
 		private function createButtons(buttonLayout:TestButtonLayoutVO, buttonTexturesMap:Dictionary, gameSize:GameSizeVO):void

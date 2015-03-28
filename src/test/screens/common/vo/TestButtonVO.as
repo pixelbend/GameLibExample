@@ -1,43 +1,43 @@
-package test.screens.tweenTest.vo
+package test.screens.common.vo
 {
-	public class TweenTestButtonLayoutVO
+	public class TestButtonVO
 	{
 		//==============================================================================================================
 		// MEMBERS
 		//==============================================================================================================
 
-		private var buttonWidth						:Number;
-		private var buttonHeight					:Number;
-		private var buttons							:Vector.<TweenTestButtonVO>;
+		private var x					:Number;
+		private var buttonID			:String;
+		private var linkage				:String;
 
 		//==============================================================================================================
 		// CONSTRUCTOR
 		//==============================================================================================================
 
-		public function TweenTestButtonLayoutVO(buttonWidth:Number, buttonHeight:Number, buttons:Vector.<TweenTestButtonVO>)
+		public function TestButtonVO(x:Number, buttonID:String, linkage:String)
 		{
-			this.buttonWidth = buttonWidth;
-			this.buttonHeight = buttonHeight;
-			this.buttons = buttons;
+			this.x = x;
+			this.buttonID = buttonID;
+			this.linkage = linkage;
 		}
 
 		//==============================================================================================================
 		// GETTERS
 		//==============================================================================================================
 
-		public function getButtonWidth():Number
+		public function getX():Number
 		{
-			return buttonWidth;
+			return x;
 		}
 
-		public function getButtonHeight():Number
+		public function getButtonID():String
 		{
-			return buttonHeight;
+			return buttonID;
 		}
 
-		public function getButtons():Vector.<TweenTestButtonVO>
+		public function getLinkage():String
 		{
-			return buttons;
+			return linkage;
 		}
 	}
 }

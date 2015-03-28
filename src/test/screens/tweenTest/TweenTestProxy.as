@@ -2,11 +2,12 @@ package test.screens.tweenTest
 {
 	import com.pixelBender.model.GameScreenProxy;
 
-	import test.screens.tweenTest.vo.TweenTestButtonVO;
+	import test.screens.common.vo.TestTitleLayoutVO;
+
+	import test.screens.common.vo.TestButtonVO;
 
 	import test.screens.tweenTest.vo.TweenTestSetupVO;
-	import test.screens.tweenTest.vo.TweenTestButtonLayoutVO;
-	import test.screens.tweenTest.vo.TweenTestTitleLayoutVO;
+	import test.screens.common.vo.TestButtonLayoutVO;
 
 	public class TweenTestProxy extends GameScreenProxy
 	{
@@ -14,8 +15,8 @@ package test.screens.tweenTest
 		// MEMBERS
 		//==============================================================================================================
 
-		protected var titleLayout								:TweenTestTitleLayoutVO;
-		protected var buttonLayout								:TweenTestButtonLayoutVO;
+		protected var titleLayout								:TestTitleLayoutVO;
+		protected var buttonLayout								:TestButtonLayoutVO;
 		protected var testSetups								:Vector.<TweenTestSetupVO>;
 
 		//==============================================================================================================
@@ -43,12 +44,12 @@ package test.screens.tweenTest
 		// GETTERS
 		//==============================================================================================================
 
-		public function getTitleLayout():TweenTestTitleLayoutVO
+		public function getTitleLayout():TestTitleLayoutVO
 		{
 			return titleLayout;
 		}
 
-		public function getButtonLayout():TweenTestButtonLayoutVO
+		public function getButtonLayout():TestButtonLayoutVO
 		{
 			return buttonLayout;
 		}
@@ -68,9 +69,9 @@ package test.screens.tweenTest
 				buttonLayoutXML:XML = screenLogicXML.tweenTestButtonLayout[0],
 				buttonLayoutList:XMLList = buttonLayoutXML.button,
 				setupsList:XMLList = screenLogicXML.tweenTestSetups.tweenTestSetup,
-				buttons:Vector.<TweenTestButtonVO> = new Vector.<TweenTestButtonVO>();
+				buttons:Vector.<TestButtonVO> = new Vector.<TestButtonVO>();
 
-			titleLayout = new TweenTestTitleLayoutVO(
+			titleLayout = new TestTitleLayoutVO(
 														parseFloat(String(titleLayoutXML.@x)),
 														parseFloat(String(titleLayoutXML.@textWidth)),
 														parseFloat(String(titleLayoutXML.@textHeight))
@@ -79,7 +80,7 @@ package test.screens.tweenTest
 			for each (var buttonNode:XML in buttonLayoutList)
 			{
 				buttons.push(
-								new TweenTestButtonVO(
+								new TestButtonVO(
 														parseFloat(String(buttonNode.@x)),
 														String(buttonNode.@buttonID),
 														String(buttonNode.@linkage)
@@ -87,7 +88,7 @@ package test.screens.tweenTest
 								);
 			}
 
-			buttonLayout = new TweenTestButtonLayoutVO(
+			buttonLayout = new TestButtonLayoutVO(
 																parseFloat(String(buttonLayoutXML.@buttonWidth)),
 																parseFloat(String(buttonLayoutXML.@buttonHeight)),
 																buttons

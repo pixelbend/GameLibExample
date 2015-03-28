@@ -27,8 +27,8 @@ package test.screens.tweenTest
 	import test.screens.common.view.BackView;
 	import test.screens.common.view.TitleView;
 	import test.screens.tweenTest.view.TweenTestViewMediator;
-	import test.screens.tweenTest.vo.TweenTestButtonLayoutVO;
-	import test.screens.tweenTest.vo.TweenTestButtonVO;
+	import test.screens.common.vo.TestButtonLayoutVO;
+	import test.screens.common.vo.TestButtonVO;
 	import test.screens.tweenTest.vo.TweenTestSetupVO;
 
 	public class TweenTestScreen extends StarlingGameScreen
@@ -38,10 +38,10 @@ package test.screens.tweenTest
 		//==============================================================================================================
 
 		[Embed(source="../../../assets/generic/screens/tweenTest/settings/logic.xml")]
-		private const logicXML														:Class;
+		private const logicXML												:Class;
 
 		[Embed(source="../../../assets/generic/screens/tweenTest/settings/assets.xml")]
-		private const assetsXML														:Class;
+		private const assetsXML												:Class;
 
 		//==============================================================================================================
 		// MEMBERS
@@ -209,7 +209,7 @@ package test.screens.tweenTest
 		private function createTweenTestViews(proxy:TweenTestProxy, gameSize:GameSizeVO):void
 		{
 			var tweenTestSetups:Vector.<TweenTestSetupVO> = proxy.getTestSetups(),
-				buttonLayout:TweenTestButtonLayoutVO = proxy.getButtonLayout(),
+				buttonLayout:TestButtonLayoutVO = proxy.getButtonLayout(),
 				testMediator:TweenTestViewMediator,
 				i:int;
 
@@ -248,11 +248,11 @@ package test.screens.tweenTest
 			tweenTarget.y = gameSize.getHeight() * 0.75;
 		}
 
-		protected function createTextureMap(gameSize:GameSizeVO, buttonLayout:TweenTestButtonLayoutVO):void
+		protected function createTextureMap(gameSize:GameSizeVO, buttonLayout:TestButtonLayoutVO):void
 		{
 			if (buttonTextures != null) return;
 
-			var buttonVOs:Vector.<TweenTestButtonVO> = buttonLayout.getButtons(),
+			var buttonVOs:Vector.<TestButtonVO> = buttonLayout.getButtons(),
 				buttonWidth:Number = gameSize.getWidth() * buttonLayout.getButtonWidth(),
 				buttonHeight:Number = gameSize.getHeight() * buttonLayout.getButtonHeight(),
 				buttonSize:Number = Math.min(buttonWidth, buttonHeight);

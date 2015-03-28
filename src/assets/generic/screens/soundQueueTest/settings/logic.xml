@@ -1,31 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <logic>
 
-    <!--
-    Button layout:
-        fontSize: font size to write the text on each button
-        columns: the buttons will be placed in a matrix formation. columns defines the maximum number of buttons per row
-        width: button width. relative to stage width
-        height: button height. relative to stage height
-        ellipseDimension: round corner dimension. relative to the button height
-        horizontalGap: the horizontal distance between buttons. relative to button width
-        verticalGap: the vertical distance between buttons. relative to button height
-        startX: the starting X for the button matrix arrangement. relative to stage width
-        startY: the starting Y for the button matrix arrangement. relative to stage height
-    -->
-    <buttonLayout fontSize="20" columns="4" width="0.2" height="0.2" ellipseDimension="0.2" horizontalGap="0.2"
-                  verticalGap="0.2" startX="0.04" startY="0.4"/>
-    <!-- Test buttons. Each test button must point to a valid test screen name -->
-    <buttons>
+    <soundQueueTestTitleLayout x="0" textWidth="0.2" textHeight="0.1" />
 
-        <button textID="startQueueOnVoice" commandName="_game__startQueuePlayer" sounds="voice0;voice1" channelID="0"/>
-        <button textID="pauseQueueOnVoice" commandName="_game__pauseQueuePlayer" channelID="0"/>
-        <button textID="resumeQueueOnVoice" commandName="_game__resumeQueuePlayer" channelID="0"/>
-        <button textID="stopQueueOnVoice" commandName="_game__stopQueuePlayer" channelID="0"/>
+    <soundQueueTestButtonLayout buttonWidth="0.1" buttonHeight="0.15">
+        <button x=".3" buttonID="play" linkage="buttonPlayLinkage"/>
+        <button x=".45" buttonID="pause" linkage="buttonPauseLinkage"/>
+        <button x=".6" buttonID="stop" linkage="buttonStopLinkage"/>
+    </soundQueueTestButtonLayout>
 
-        <button textID="startQueueOnSFX" commandName="_game__startQueuePlayer" sounds="sfx0;sfx1" channelID="1"/>
-        <button textID="pauseQueueOnSFX" commandName="_game__pauseQueuePlayer" channelID="1"/>
-        <button textID="resumeQueueOnSFX" commandName="_game__resumeQueuePlayer" channelID="1"/>
-        <button textID="stopQueueOnSFX" commandName="_game__stopQueuePlayer" channelID="1"/>
-    </buttons>
+    <soundQueueTestSetups>
+        <soundQueueTestSetup setupID="voice" textID="voiceQueue" y=".50" soundIDs="voice0;voice1" channelID="0" />
+        <soundQueueTestSetup setupID="sfx" textID="sfxQueue" y=".65" soundIDs="sfx0;sfx1" channelID="1" />
+    </soundQueueTestSetups>
 </logic>

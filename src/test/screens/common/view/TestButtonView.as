@@ -1,4 +1,4 @@
-package test.screens.tweenTest.view
+package test.screens.common.view
 {
 	import com.pixelBender.helpers.StarlingHelpers;
 	import com.pixelBender.interfaces.IRunnable;
@@ -10,7 +10,7 @@ package test.screens.tweenTest.view
 
 	import test.facade.TestGameFacade;
 
-	public class TweenTestButtonView implements IRunnable
+	public class TestButtonView implements IRunnable
 	{
 
 		//==============================================================================================================
@@ -31,7 +31,7 @@ package test.screens.tweenTest.view
 		// CONSTRUCTOR
 		//==============================================================================================================
 
-		public function TweenTestButtonView(mediatorName:String, buttonID:String)
+		public function TestButtonView(mediatorName:String, buttonID:String)
 		{
 			this.notificationName = mediatorName + BUTTON_TRIGGERED;
 			this.buttonID = buttonID;

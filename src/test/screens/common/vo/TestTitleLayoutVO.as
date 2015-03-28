@@ -1,6 +1,6 @@
-package test.screens.tweenTest.vo
+package test.screens.common.vo
 {
-	public class TweenTestTitleLayoutVO
+	public class TestTitleLayoutVO
 	{
 		//==============================================================================================================
 		// MEMBERS
@@ -14,7 +14,7 @@ package test.screens.tweenTest.vo
 		// CONSTRUCTOR
 		//==============================================================================================================
 
-		public function TweenTestTitleLayoutVO(x:Number, textWidth:Number, textHeight:Number)
+		public function TestTitleLayoutVO(x:Number, textWidth:Number, textHeight:Number)
 		{
 			this.x = x;
 			this.textWidth = textWidth;
