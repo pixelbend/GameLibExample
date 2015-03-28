@@ -24,16 +24,22 @@ package constants
 		TweenTestScreen;
 		PopupTestScreen;
 		LocaleTestScreen;
+
 		// Transitions
 		IntroTransition;
 		LoopTransition;
 		OutroTransition;
+
 		// Popups
 		TestPopup;
 		FirstPopup;
+
 		// Embedded graphics
 		buttonLinkage;
 		buttonPlayLinkage;
+		buttonPauseLinkage;
+		buttonStopLinkage;
+		buttonResetLinkage;
 		backButtonLinkage;
 	}
 }

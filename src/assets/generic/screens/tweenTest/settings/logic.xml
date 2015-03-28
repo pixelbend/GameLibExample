@@ -1,30 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <logic>
-    <!--
-   Button layout:
-       fontSize: font size to write the text on each button
-       columns: the buttons will be placed in a matrix formation. columns defines the maximum number of buttons per row
-       width: button width. relative to stage width
-       height: button height. relative to stage height
-       ellipseDimension: round corner dimension. relative to the button height
-       horizontalGap: the horizontal distance between buttons. relative to button width
-       verticalGap: the vertical distance between buttons. relative to button height
-       startX: the starting X for the button matrix arrangement. relative to stage width
-       startY: the starting Y for the button matrix arrangement. relative to stage height
-   -->
-    <buttonLayout fontSize="20" columns="4" width="0.2" height="0.1" ellipseDimension="0.8" horizontalGap="0.2"
-                  verticalGap="0.2" startX="0.04" startY="0.3"/>
-    <!-- Test buttons. Each test button must point to a valid test screen name -->
-    <buttons>
 
-        <button textID="startMoveTween"     commandName="_game__startTween"     tweenName="move"   buttonGraphicsLinkage="buttonPlayLinkage"  duration="2000"     properties="x:0.7;y:0.7"    needsUpdating="true" />
-        <button textID="pauseMoveTween"     commandName="_game__pauseTween"     tweenName="move" />
-        <button textID="resumeMoveTween"    commandName="_game__resumeTween"    tweenName="move" />
-        <button textID="stopMoveTween"      commandName="_game__stopTween"      tweenName="move" />
-        <button textID="startScaleTween"    commandName="_game__startTween"     tweenName="scale"  buttonGraphicsLinkage="buttonPlayLinkage"  duration="2000"     properties="scaleX:1.5;scaleY:0.9" />
-        <button textID="pauseScaleTween"    commandName="_game__pauseTween"     tweenName="scale" />
-        <button textID="resumeScaleTween"   commandName="_game__resumeTween"    tweenName="scale" />
-        <button textID="stopScaleTween"     commandName="_game__stopTween"      tweenName="scale" />
-        <button textID="resetTarget"        commandName="_game__resetTarget" />
-    </buttons>
+    <tweenTestTitleLayout x="0" textWidth="0.2" textHeight="0.1" />
+
+    <tweenTestButtonLayout buttonWidth="0.1" buttonHeight="0.15">
+        <button x=".3" buttonID="play" linkage="buttonPlayLinkage"/>
+        <button x=".45" buttonID="pause" linkage="buttonPauseLinkage"/>
+        <button x=".6" buttonID="stop" linkage="buttonStopLinkage"/>
+        <button x=".75" buttonID="reset" linkage="buttonResetLinkage"/>
+    </tweenTestButtonLayout>
+
+    <tweenTestSetups>
+        <tweenTestSetup y=".32" properties="x:0.75;y:0.7" duration="2000" tweenNameTextID="move" dependentOnScreenSize="true" />
+        <tweenTestSetup y=".50" properties="scaleX:1.3;scaleY:0.4" duration="2000" tweenNameTextID="scale" />
+    </tweenTestSetups>
 </logic>

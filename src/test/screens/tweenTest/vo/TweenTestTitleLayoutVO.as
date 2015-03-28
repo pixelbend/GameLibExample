@@ -1,24 +1,24 @@
 package test.screens.tweenTest.vo
 {
-	public class TweenTestButtonVO
+	public class TweenTestTitleLayoutVO
 	{
 		//==============================================================================================================
 		// MEMBERS
 		//==============================================================================================================
 
-		private var x					:Number;
-		private var buttonID			:String;
-		private var linkage				:String;
+		private var x								:Number;
+		private var textWidth						:Number;
+		private var textHeight						:Number;
 
 		//==============================================================================================================
 		// CONSTRUCTOR
 		//==============================================================================================================
 
-		public function TweenTestButtonVO(x:Number, buttonID:String, linkage:String)
+		public function TweenTestTitleLayoutVO(x:Number, textWidth:Number, textHeight:Number)
 		{
 			this.x = x;
-			this.buttonID = buttonID;
-			this.linkage = linkage;
+			this.textWidth = textWidth;
+			this.textHeight = textHeight;
 		}
 
 		//==============================================================================================================
@@ -30,14 +30,14 @@ package test.screens.tweenTest.vo
 			return x;
 		}
 
-		public function getButtonID():String
+		public function getTextWidth():Number
 		{
-			return buttonID;
+			return textWidth;
 		}
 
-		public function getLinkage():String
+		public function getTextHeight():Number
 		{
-			return linkage;
+			return textHeight;
 		}
 	}
 }

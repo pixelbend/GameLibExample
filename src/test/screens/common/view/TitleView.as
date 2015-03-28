@@ -25,10 +25,10 @@ package test.screens.common.view
 
 		public function TitleView(mediatorName:String, container:Sprite, gameSize:GameSizeVO)
 		{
-
-			title = new TextField(gameSize.getWidth(), gameSize.getHeight() * 0.3,
+			title = new TextField(gameSize.getWidth(), gameSize.getHeight() * 0.2,
 									LocalizationHelpers.getLocalizedText(mediatorName, "title"),
-										"Verdana", 40, 0xFFFFFF, true);
+										"Verdana", gameSize.getHeight() * 0.1, 0xFFFFFF, true);
+			title.y = gameSize.getHeight() * 0.1;
 			container.addChild(title);
 		}
 

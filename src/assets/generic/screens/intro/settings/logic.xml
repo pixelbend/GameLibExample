@@ -13,8 +13,8 @@
         startX: the starting X for the button matrix arrangement. relative to stage width
         startY: the starting Y for the button matrix arrangement. relative to stage height
     -->
-    <buttonLayout fontSize="20" columns="4" width="0.2" height="0.2" ellipseDimension="0.2" horizontalGap="0.2" verticalGap="0.1"
-                      startX="0.04" startY="0.5"/>
+    <buttonLayout fontSize="20" columns="3" width="0.2" height="0.2" ellipseDimension="0.2" horizontalGap="0.2" verticalGap="0.1"
+                      startX="0.16" startY="0.45"/>
     <!-- Test buttons. Each test button must point to a valid test screen name -->
     <buttons>
         <button screenName="_game__soundTestScreen" />

@@ -1,11 +1,23 @@
 package test.screens.tweenTest
 {
-	import test.screens.common.model.AbstractScreenProxy;
-	import test.screens.common.vo.IButtonDataVO;
+	import com.pixelBender.model.GameScreenProxy;
+
 	import test.screens.tweenTest.vo.TweenTestButtonVO;
 
-	public class TweenTestProxy extends AbstractScreenProxy
+	import test.screens.tweenTest.vo.TweenTestSetupVO;
+	import test.screens.tweenTest.vo.TweenTestButtonLayoutVO;
+	import test.screens.tweenTest.vo.TweenTestTitleLayoutVO;
+
+	public class TweenTestProxy extends GameScreenProxy
 	{
+		//==============================================================================================================
+		// MEMBERS
+		//==============================================================================================================
+
+		protected var titleLayout								:TweenTestTitleLayoutVO;
+		protected var buttonLayout								:TweenTestButtonLayoutVO;
+		protected var testSetups								:Vector.<TweenTestSetupVO>;
+
 		//==============================================================================================================
 		// CONSTRUCTOR
 		//==============================================================================================================
@@ -16,32 +28,97 @@ package test.screens.tweenTest
 		}
 
 		//==============================================================================================================
+		// PUBLIC OVERRIDES
+		//==============================================================================================================
+
+		public override function dispose():void
+		{
+			testSetups = null;
+			buttonLayout = null;
+			titleLayout = null;
+			super.dispose();
+		}
+
+		//==============================================================================================================
+		// GETTERS
+		//==============================================================================================================
+
+		public function getTitleLayout():TweenTestTitleLayoutVO
+		{
+			return titleLayout;
+		}
+
+		public function getButtonLayout():TweenTestButtonLayoutVO
+		{
+			return buttonLayout;
+		}
+
+		public function getTestSetups():Vector.<TweenTestSetupVO>
+		{
+			return testSetups;
+		}
+
+		//==============================================================================================================
 		// PROTECTED OVERRIDES
 		//==============================================================================================================
 
-		protected override function parseButtonData(buttonDataXML:XML):IButtonDataVO
+		protected override function parseScreenLogicXML():void
 		{
-			// Internals
-			var tweenProperties:Object = {},
-				tweenPropertyList:Array = String(buttonDataXML.@properties).split(";"),
-				tweenPropertyString:String,
-				tweenPropertyPair:Array;
-			// Split and parse properties
-			for each (tweenPropertyString in tweenPropertyList)
+			var titleLayoutXML:XML = screenLogicXML.tweenTestTitleLayout[0],
+				buttonLayoutXML:XML = screenLogicXML.tweenTestButtonLayout[0],
+				buttonLayoutList:XMLList = buttonLayoutXML.button,
+				setupsList:XMLList = screenLogicXML.tweenTestSetups.tweenTestSetup,
+				buttons:Vector.<TweenTestButtonVO> = new Vector.<TweenTestButtonVO>();
+
+			titleLayout = new TweenTestTitleLayoutVO(
+														parseFloat(String(titleLayoutXML.@x)),
+														parseFloat(String(titleLayoutXML.@textWidth)),
+														parseFloat(String(titleLayoutXML.@textHeight))
+													);
+
+			for each (var buttonNode:XML in buttonLayoutList)
 			{
-				tweenPropertyPair = tweenPropertyString.split(":");
-				tweenProperties[tweenPropertyPair[0]] = parseFloat(tweenPropertyPair[1]);
+				buttons.push(
+								new TweenTestButtonVO(
+														parseFloat(String(buttonNode.@x)),
+														String(buttonNode.@buttonID),
+														String(buttonNode.@linkage)
+														)
+								);
 			}
-			// Create button VO
-			return new TweenTestButtonVO(
-											String(buttonDataXML.@textID),
-											String(buttonDataXML.@commandName),
-											String(buttonDataXML.@tweenName),
-											String(buttonDataXML.@buttonGraphicsLinkage),
-											parseInt(String(buttonDataXML.@duration)),
-											tweenProperties,
-											String(buttonDataXML.@needsUpdating) == "true"
-											);
+
+			buttonLayout = new TweenTestButtonLayoutVO(
+																parseFloat(String(buttonLayoutXML.@buttonWidth)),
+																parseFloat(String(buttonLayoutXML.@buttonHeight)),
+																buttons
+														);
+
+			testSetups = new Vector.<TweenTestSetupVO>();
+			for each (var testButtonXML:XML in setupsList)
+			{
+				testSetups.push(parseTestSetup(testButtonXML));
+			}
+		}
+
+		//==============================================================================================================
+		// LOCALS
+		//==============================================================================================================
+
+		private static function parseTestSetup(testButtonXML:XML):TweenTestSetupVO
+		{
+			var propertyPairList:Array = String(testButtonXML.@properties).split(";"),
+				properties:Object = {},
+				propertyPair:Array,
+				i:int;
+
+			for (i=0; i<propertyPairList.length; i++)
+			{
+				propertyPair = propertyPairList[i].split(":");
+				properties[propertyPair[0]] = parseFloat(propertyPair[1]);
+			}
+
+			return new TweenTestSetupVO(parseFloat(String(testButtonXML.@y)), properties,
+										parseInt(String(testButtonXML.@duration)), String(testButtonXML.@tweenNameTextID));
 		}
 	}
 }

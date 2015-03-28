@@ -41,7 +41,7 @@
         </module>
         <!-- Sound queue test screen texts -->
         <module name="_game__soundQueueTestScreen">
-            <text name="title"><![CDATA[SOUND QUEUE CHECK]]></text>
+            <text name="title"><![CDATA[SOUND QUEUE]]></text>
             <text name="startQueueOnVoice"><![CDATA[Start queue on voice channel]]></text>
             <text name="pauseQueueOnVoice"><![CDATA[Pause queue on voice channel]]></text>
             <text name="resumeQueueOnVoice"><![CDATA[Resume queue on voice channel]]></text>
@@ -58,14 +58,8 @@
         <!-- Tween test screen texts -->
         <module name="_game__tweenTestScreen">
             <text name="title"><![CDATA[TWEEN]]></text>
-            <text name="startMoveTween"><![CDATA[Start move tween]]></text>
-            <text name="pauseMoveTween"><![CDATA[Pause move tween]]></text>
-            <text name="resumeMoveTween"><![CDATA[Resume move tween]]></text>
-            <text name="stopMoveTween"><![CDATA[Stop move tween]]></text>
-            <text name="startScaleTween"><![CDATA[Start scale tween]]></text>
-            <text name="pauseScaleTween"><![CDATA[Pause scale tween]]></text>
-            <text name="resumeScaleTween"><![CDATA[Resume scale tween]]></text>
-            <text name="stopScaleTween"><![CDATA[Stop scale tween]]></text>
+            <text name="move"><![CDATA[Move tween]]></text>
+            <text name="scale"><![CDATA[Scale tween]]></text>
             <text name="resetTarget"><![CDATA[Reset target]]></text>
         </module>
         <!-- Tween test screen texts -->
@@ -84,7 +78,7 @@
         </module>
         <!-- Locale test screen texts -->
         <module name="_game__localeTestScreen">
-            <text name="title"><![CDATA[Language]]></text>
+            <text name="title"><![CDATA[LANGUAGE]]></text>
             <text name="currentLanguage"><![CDATA[Current language: ]]></text>
             <text name="changeLanguage"><![CDATA[Change language]]></text>
         </module>
@@ -101,7 +95,7 @@
     <locale name="fr">
         <!-- Locale test screen texts -->
         <module name="_game__localeTestScreen">
-            <text name="title"><![CDATA[Langue]]></text>
+            <text name="title"><![CDATA[LANGUE]]></text>
             <text name="currentLanguage"><![CDATA[Langue courant: ]]></text>
             <text name="changeLanguage"><![CDATA[Changer de langue]]></text>
         </module>
