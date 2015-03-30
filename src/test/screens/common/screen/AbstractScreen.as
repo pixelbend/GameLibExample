@@ -195,7 +195,7 @@ package test.screens.common.screen
 												(startX + buttonColumn * (buttonWidth + buttonHorizontalGap)),
 												(startY + buttonRow * (buttonHeight + buttonVerticalGap)),
 												buttonFontSize,
-												0x333333);
+												0xFFFFFF);
 			}
 		}
 

@@ -2,10 +2,18 @@ package test.facade
 {
 	import com.pixelBender.constants.GameConstants;
 	import com.pixelBender.facade.GameFacade;
-	
+	import com.pixelBender.helpers.StarlingHelpers;
+
+	import constants.Constants;
+
+	import flash.display.BitmapData;
+
 	import flash.display.DisplayObjectContainer;
+	import flash.display.MovieClip;
+	import flash.geom.Matrix;
 
 	import starling.display.DisplayObjectContainer;
+	import starling.display.Sprite;
 
 	import test.command.GlobalAssetPackageLoadedHandler;
 
@@ -39,6 +47,24 @@ package test.facade
 			}
 			return instance as TestGameFacade;
 		}
+
+		//==============================================================================================================
+		// API
+		//==============================================================================================================
+
+		public function createStageBackground(stageBackgroundVector:MovieClip):void
+		{
+			// Set stage background
+			var bitmapData:BitmapData = new BitmapData(gameSize.getWidth(), gameSize.getHeight(), true, 0x00000000),
+					matrix:Matrix = new Matrix();
+
+			matrix.scale(gameSize.getScale(), gameSize.getScale());
+			matrix.translate(((gameSize.getWidth() - Constants.WIDTH * gameSize.getScale()) >> 1), 0);
+			bitmapData.draw(stageBackgroundVector, matrix, null, null, null, true);
+			// Create background
+			var background:Sprite = StarlingHelpers.createTextureSpriteBackground(bitmapData, bitmapData.width, bitmapData.height, true);
+			starlingGameRoot.addChildAt(background, 0);
+		}
 		
 		//==============================================================================================================
 		// PUBLIC OVERRIDES
@@ -58,7 +84,7 @@ package test.facade
 			super.init(root, globalLogic, globalAssets, gameReadyCallback, firstScreenName, starlingRoot,
 							transitionSequenceName, locale);
 		}
-		
+
 		//==============================================================================================================
 		// PROTECTED OVERRIDES
 		//==============================================================================================================

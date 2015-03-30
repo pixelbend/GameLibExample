@@ -5,6 +5,8 @@ package test.screens.common.view
 	import com.pixelBender.interfaces.IDispose;
 	import com.pixelBender.model.vo.game.GameSizeVO;
 
+	import constants.Constants;
+
 	import starling.display.Sprite;
 	import starling.text.TextField;
 
@@ -27,7 +29,7 @@ package test.screens.common.view
 		{
 			title = new TextField(gameSize.getWidth(), gameSize.getHeight() * 0.2,
 									LocalizationHelpers.getLocalizedText(mediatorName, "title"),
-										"Verdana", gameSize.getHeight() * 0.1, 0xFFFFFF, true);
+										Constants.APPLICATION_FONT_BOLD, gameSize.getHeight() * 0.1, 0xFFFFFF, true);
 			title.y = gameSize.getHeight() * 0.1;
 			container.addChild(title);
 		}

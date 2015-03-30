@@ -1,7 +1,11 @@
 package test.screens.common.view
 {
+	import com.pixelBender.constants.GameConstants;
+	import com.pixelBender.controller.game.component.GameComponent;
 	import com.pixelBender.helpers.StarlingHelpers;
 	import com.pixelBender.interfaces.IRunnable;
+
+	import constants.Constants;
 
 	import flash.geom.Rectangle;
 
@@ -50,7 +54,7 @@ package test.screens.common.view
 			button.y = y;
 			if (text && text.length > 0)
 			{
-				button.fontName = "Arial";
+				button.fontName = Constants.APPLICATION_FONT_REGULAR;
 				button.fontSize = fontSize;
 				button.fontColor = fontColor;
 				button.textBounds = textBounds;

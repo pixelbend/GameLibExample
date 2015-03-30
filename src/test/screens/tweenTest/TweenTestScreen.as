@@ -12,7 +12,6 @@ package test.screens.tweenTest
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;
 	import flash.geom.Matrix;
-	import flash.geom.Rectangle;
 	import flash.system.ApplicationDomain;
 	import flash.utils.Dictionary;
 
@@ -21,8 +20,6 @@ package test.screens.tweenTest
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Sprite;
 	import starling.textures.Texture;
-
-	import test.screens.common.utils.ScaleBitmap;
 
 	import test.screens.common.view.BackView;
 	import test.screens.common.view.TitleView;
@@ -260,41 +257,28 @@ package test.screens.tweenTest
 			buttonTextures = new Dictionary();
 			for (var i:int=0; i<buttonVOs.length; i++)
 			{
-				buttonTextures[buttonVOs[i].getButtonID()] = getButtonTextures(2, buttonVOs[i].getLinkage(), buttonSize, buttonSize);
+				buttonTextures[buttonVOs[i].getButtonID()] = getButtonTextures(2, buttonVOs[i].getLinkage(), buttonSize);
 			}
 		}
 
-		protected static function getButtonTextures(numberOfFrames:int, buttonGraphicsLinkage:String, buttonWidth:int, buttonHeight:int):Vector.<Texture>
+		protected static function getButtonTextures(numberOfFrames:int, buttonGraphicsLinkage:String, buttonSize:int):Vector.<Texture>
 		{
 			var buttonClass:Class,
 				buttonGraphics:MovieClip,
-				originalButtonBitmapData:BitmapData,
-				originalButtonBitmap:ScaleBitmap,
 				bitmapData:BitmapData,
-				scale9Grid:Rectangle,
+				matrix:Matrix = new Matrix(),
 				buttonTextures:Vector.<Texture>;
 
 			buttonClass = ApplicationDomain.currentDomain.getDefinition(buttonGraphicsLinkage) as Class;
 			buttonGraphics = new buttonClass();
-			scale9Grid = new Rectangle();
 			buttonTextures = new Vector.<Texture>(numberOfFrames, true);
-
-			// Compute vector scale 9 grid rect
-			scale9Grid.x = buttonGraphics.width * 0.1;
-			scale9Grid.y = buttonGraphics.height * 0.1;
-			scale9Grid.width = buttonGraphics.width * 0.8;
-			scale9Grid.height = buttonGraphics.height * 0.8;
 
 			for (var i:int=0; i<buttonTextures.length; i++)
 			{
 				buttonGraphics.gotoAndStop(i+1);
-				originalButtonBitmapData = new BitmapData(buttonGraphics.width, buttonGraphics.height, true, 0x0);
-				originalButtonBitmapData.draw(buttonGraphics, null, null, null, null, true);
-				originalButtonBitmap = new ScaleBitmap(originalButtonBitmapData, "auto", true);
-				originalButtonBitmap.scale9Grid = scale9Grid;
-				originalButtonBitmap.setSize(buttonWidth, buttonHeight);
-				bitmapData = new BitmapData(buttonWidth, buttonHeight, true, 0x00000000);
-				bitmapData.draw(originalButtonBitmap, null, null, null, null, true);
+				matrix.scale(buttonSize/buttonGraphics.width, buttonSize/buttonGraphics.height);
+				bitmapData = new BitmapData(buttonSize, buttonSize, true, 0x00000000);
+				bitmapData.draw(buttonGraphics, matrix, null, null, null, true);
 				buttonTextures[i] = Texture.fromBitmapData(bitmapData, false);
 			}
 

@@ -10,6 +10,10 @@ package test.screens.soundQueueTest.view
 	import com.pixelBender.model.vo.game.GameSizeVO;
 	import com.pixelBender.model.vo.sound.CompleteQueuePropertiesVO;
 
+	import constants.Constants;
+
+	import flash.text.TextFieldAutoSize;
+
 	import flash.utils.Dictionary;
 
 	import org.puremvc.as3.interfaces.INotification;
@@ -19,6 +23,7 @@ package test.screens.soundQueueTest.view
 	import starling.display.Sprite;
 	import starling.text.TextField;
 	import starling.textures.Texture;
+	import starling.utils.VAlign;
 
 	import test.screens.common.view.TestButtonView;
 
@@ -223,9 +228,10 @@ package test.screens.soundQueueTest.view
 
 		private function createName(parentMediatorName:String, titleLayout:TestTitleLayoutVO, setup:SoundQueueTestSetupVO, gameSize:GameSizeVO):void
 		{
-			name = new TextField(gameSize.getWidth() * titleLayout.getTextWidth(), gameSize.getHeight() * titleLayout.getTextHeight(),
+			var tfHeight:int = gameSize.getHeight() * titleLayout.getTextHeight();
+			name = new TextField(gameSize.getWidth() * titleLayout.getTextWidth(), tfHeight,
 										LocalizationHelpers.getLocalizedText(parentMediatorName, setup.getTextID()),
-										"Verdana", 20, 0x000000, true);
+										Constants.APPLICATION_FONT_REGULAR, tfHeight * 0.25, 0xFFFFFF, true);
 			name.x = gameSize.getWidth() * titleLayout.getX();
 			container.addChild(name);
 		}

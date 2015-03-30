@@ -8,6 +8,8 @@ package test.screens.tweenTest.view
 	import com.pixelBender.interfaces.IRunnable;
 	import com.pixelBender.model.vo.game.GameSizeVO;
 
+	import constants.Constants;
+
 	import flash.utils.Dictionary;
 
 	import org.puremvc.as3.interfaces.INotification;
@@ -238,9 +240,10 @@ package test.screens.tweenTest.view
 
 		private function createTweenName(parentMediatorName:String, titleLayout:TestTitleLayoutVO, setup:TweenTestSetupVO, gameSize:GameSizeVO):void
 		{
+			var tfHeight:int = gameSize.getHeight() * titleLayout.getTextHeight();
 			tweenName = new TextField(gameSize.getWidth() * titleLayout.getTextWidth(), gameSize.getHeight() * titleLayout.getTextHeight(),
 										LocalizationHelpers.getLocalizedText(parentMediatorName, setup.getTweenNameTextID()),
-										"Verdana", 20, 0x000000, true);
+										Constants.APPLICATION_FONT_BOLD, tfHeight * 0.25, 0xFFFFFF, true);
 			tweenName.x = gameSize.getWidth() * titleLayout.getX();
 			container.addChild(tweenName);
 		}

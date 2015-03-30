@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <logic>
 
-    <soundQueueTestTitleLayout x="0" textWidth="0.2" textHeight="0.1" />
+    <soundQueueTestTitleLayout x="0" textWidth="0.2" textHeight="0.15" />
 
     <soundQueueTestButtonLayout buttonWidth="0.1" buttonHeight="0.15">
         <button x=".3" buttonID="play" linkage="buttonPlayLinkage"/>
