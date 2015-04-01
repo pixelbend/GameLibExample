@@ -203,10 +203,10 @@ package test.screens.soundQueueTest
 		protected static function getButtonTextures(numberOfFrames:int, buttonGraphicsLinkage:String, buttonSize:int):Vector.<Texture>
 		{
 			var buttonClass:Class,
-					buttonGraphics:MovieClip,
-					bitmapData:BitmapData,
-					matrix:Matrix = new Matrix(),
-					buttonTextures:Vector.<Texture>;
+				buttonGraphics:MovieClip,
+				bitmapData:BitmapData,
+				matrix:Matrix = new Matrix(),
+				buttonTextures:Vector.<Texture>;
 
 			buttonClass = ApplicationDomain.currentDomain.getDefinition(buttonGraphicsLinkage) as Class;
 			buttonGraphics = new buttonClass();
@@ -214,6 +214,7 @@ package test.screens.soundQueueTest
 
 			for (var i:int=0; i<buttonTextures.length; i++)
 			{
+				matrix.identity();
 				buttonGraphics.gotoAndStop(i+1);
 				matrix.scale(buttonSize/buttonGraphics.width, buttonSize/buttonGraphics.height);
 				bitmapData = new BitmapData(buttonSize, buttonSize, true, 0x00000000);

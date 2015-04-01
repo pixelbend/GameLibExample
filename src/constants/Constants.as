@@ -26,6 +26,7 @@ package constants
 		public static const FILE_REFERENCE_TEST_SCREEN_NAME				:String = "_game__fileReferenceTestScreen";
 		public static const TWEEN_TEST_SCREEN							:String = "_game__tweenTestScreen";
 		public static const LOCALE_TEST_SCREEN							:String = "_game__localeTestScreen";
+		public static const POPUP_TEST_SCREEN							:String = "_game__popupTestScreen";
 
 		//==============================================================================================================
 		// BUTTON LINKAGES
@@ -64,6 +65,13 @@ package constants
 		public static const RESUME_TWEEN								:String = "_game__resumeTween";
 		public static const STOP_TWEEN									:String = "_game__stopTween";
 		public static const RESET_TARGET								:String = "_game__resetTarget";
+
+		//==============================================================================================================
+		// POPUP TEST CONSTANTS
+		//==============================================================================================================
+
+		public static const CHANGE_POPUP_CUSTOMIZATION_STATE			:String = "_game__popupChangeCustomizationState";
+		public static const POPUP_CUSTOMIZATION_STATE_CHANGED			:String = "_game__popupCustomizationStateChanged";
 
 		//==============================================================================================================
 		// LOCALE TEST SCREEN CONSTANTS

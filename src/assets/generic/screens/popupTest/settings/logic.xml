@@ -1,27 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <logic>
-    <!--
-   Button layout:
-       fontSize: font size to write the text on each button
-       columns: the buttons will be placed in a matrix formation. columns defines the maximum number of buttons per row
-       width: button width. relative to stage width
-       height: button height. relative to stage height
-       ellipseDimension: round corner dimension. relative to the button height
-       horizontalGap: the horizontal distance between buttons. relative to button width
-       verticalGap: the vertical distance between buttons. relative to button height
-       startX: the starting X for the button matrix arrangement. relative to stage width
-       startY: the starting Y for the button matrix arrangement. relative to stage height
-   -->
-    <buttonLayout fontSize="20" columns="5" width="0.1666666" height="0.2" ellipseDimension="0.2" horizontalGap="0.1666666"
-                  verticalGap="0.1" startX="0.0277777" startY="0.3"/>
-    <!-- Test buttons. Each test button must point to a valid test screen name -->
-    <buttons>
-        <button textID="openTestPopup"                      commandName="_popupScreen__openPopup"     popupName="_game__firstPopup"/>
-        <button textID="switchStackPopups"                  commandName="_popupScreen__switchStackPopups" />
-        <button textID="switchTranslucentLayerEnabled"      commandName="_popupScreen__switchTranslucentLayerEnabled" />
-        <button textID="changeTranslucentLayerColor"        commandName="_popupScreen__changeTranslucentLayerColor" />
-        <button textID="changeTranslucentLayerAlpha"        commandName="_popupScreen__changeTranslucentLayerAlpha" />
-    </buttons>
 
     <transparentLayerColors>
         <transparentLayerColor color="0x7A585E" />
@@ -34,4 +12,16 @@
         <transparentLayerAlpha alpha="0.6" />
         <transparentLayerAlpha alpha="0.9" />
     </transparentLayerAlphas>
+
+    <popupCustomizeViews>
+        <popupCustomizeView id="enableStackPopups"              type="checkBox"     x="0.05"    y="0.4"     width=".3"  height=".3"     textID="stackPopups"                noteType="stackPopups" />
+        <popupCustomizeView id="enableTranslucentLayer"         type="checkBox"     x="0.05"    y="0.7"     width=".3"  height=".3"     textID="translucentLayerEnabled"    noteType="translucentLayerEnabled" />
+        <popupCustomizeView id="changeTranslucentLayerColor"    type="colorSwitch"  x=".35"     y="0.4"     width=".3"  height=".3"     textID="translucentLayerColor"      noteType="translucentLayerColor" />
+        <popupCustomizeView id="changeTranslucentLayerAlpha"    type="alphaSwitch"  x=".35"     y="0.7"     width=".3"  height=".3"     textID="translucentLayerAlpha"      noteType="translucentLayerAlpha" />
+    </popupCustomizeViews>
+
+    <popupCustomizeResultView x="0.65"    y="0.7"     width=".3"  height=".3" textID="translucentLayerPreview" />
+
+    <button x="0.7" y="0.45" width="0.2" height="0.2" textID="openTestPopup" commandName="_popupScreen__openPopup"/>
+
 </logic>

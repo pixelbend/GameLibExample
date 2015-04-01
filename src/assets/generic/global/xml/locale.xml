@@ -65,10 +65,11 @@
             <text name="changeTranslucentLayerAlpha"><![CDATA[Change popup translucent layer alpha]]></text>
             <text name="changeTranslucentLayerColor"><![CDATA[Change popup translucent layer color]]></text>
 
-            <text name="stackPopups"><![CDATA[Stack popups enabled: ]]></text>
-            <text name="translucentLayerEnabled"><![CDATA[Translucent layer enabled: ]]></text>
-            <text name="translucentLayerColor"><![CDATA[Translucent layer color: ]]></text>
-            <text name="translucentLayerAlpha"><![CDATA[Translucent layer alpha: ]]></text>
+            <text name="stackPopups"><![CDATA[Stack popups enabled]]></text>
+            <text name="translucentLayerEnabled"><![CDATA[Translucent layer enabled]]></text>
+            <text name="translucentLayerColor"><![CDATA[Translucent layer color]]></text>
+            <text name="translucentLayerAlpha"><![CDATA[Translucent layer alpha]]></text>
+            <text name="translucentLayerPreview"><![CDATA[Translucent layer preview]]></text>
         </module>
         <!-- Locale test screen texts -->
         <module name="_game__localeTestScreen">

@@ -6,6 +6,9 @@ package test.popups.view
 	import com.pixelBender.interfaces.IPauseResume;
 	import com.pixelBender.interfaces.IRunnable;
 	import com.pixelBender.model.vo.game.GameSizeVO;
+
+	import constants.Constants;
+
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import starling.display.Button;
@@ -149,7 +152,7 @@ package test.popups.view
 		protected function createTitle(container:DisplayObjectContainer, configurationVO:PopupConfigurationVO):void
 		{
 			var titleText:String = LocalizationHelpers.getLocalizedText(mediatorName, "title");
-			title = new TextField(configurationVO.getWidth(), configurationVO.getHeight() * 0.2, titleText, "Tahoma", 40, 0xFFFFFF, true);
+			title = new TextField(configurationVO.getWidth(), configurationVO.getHeight() * 0.2, titleText, Constants.APPLICATION_FONT_BOLD, 40, 0xFFFFFF, true);
 			title.x = configurationVO.getX();
 			title.y = configurationVO.getY() + (configurationVO.getHeight() >> 2);
 			container.addChild(title);

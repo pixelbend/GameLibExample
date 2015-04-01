@@ -19,25 +19,25 @@ package constants
 	public class Linkages
 	{
 		// Fonts
-		[Embed(source = "../assets/generic/global/fonts/neoteric.ttf",
+		[Embed(source = "../assets/generic/global/fonts/voniqueRegular.ttf",
 				fontName = "ApplicationRegular",
 				mimeType = "application/x-font",
 				fontWeight="Regular",
 				fontStyle="Regular",
 				advancedAntiAliasing = "true",
 				embedAsCFF="false")]
-		public static const fontNeotericRegularClass:Class;
-		public static const NEOTERIC_REGULAR:Font = new fontNeotericRegularClass();
+		public static const fontRegularClass:Class;
+		public static const REGULAR:Font = new fontRegularClass();
 
-		[Embed(source = "../assets/generic/global/fonts/neotericBold.ttf",
+		[Embed(source = "../assets/generic/global/fonts/voniqueBold.ttf",
 				fontName = "ApplicationBold",
 				mimeType = "application/x-font",
 				fontWeight="Bold",
 				fontStyle="Bold",
 				advancedAntiAliasing = "true",
 				embedAsCFF="false")]
-		public static const fontNeotericBoldClass:Class;
-		public static const NEOTERIC_BOLD:Font = new fontNeotericBoldClass();
+		public static const fontBoldClass:Class;
+		public static const BOLD:Font = new fontBoldClass();
 
 		// Screens
 		IntroScreen;
@@ -64,5 +64,6 @@ package constants
 		buttonStopLinkage;
 		buttonResetLinkage;
 		backButtonLinkage;
+		checkBoxLinkage;
 	}
 }

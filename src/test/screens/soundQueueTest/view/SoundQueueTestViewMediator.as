@@ -241,15 +241,15 @@ package test.screens.soundQueueTest.view
 			var buttonVOs:Vector.<TestButtonVO> = buttonLayout.getButtons(),
 				buttonID:String,
 				buttonView:TestButtonView,
-				buttonTexturesTriplet:Vector.<Texture>;
+				buttonTextures:Vector.<Texture>;
 
 			buttons = new Dictionary();
 			for (var i:int=0; i<buttonVOs.length; i++)
 			{
 				buttonID = buttonVOs[i].getButtonID();
-				buttonTexturesTriplet = buttonTexturesMap[buttonID];
+				buttonTextures = buttonTexturesMap[buttonID];
 				buttonView = new TestButtonView(mediatorName, buttonID);
-				buttonView.createButton(container, buttonTexturesTriplet[0], buttonTexturesTriplet[1], gameSize.getWidth() * buttonVOs[i].getX(), 0);
+				buttonView.createButton(container, buttonTextures[0], buttonTextures[1], gameSize.getWidth() * buttonVOs[i].getX(), 0);
 				buttons[buttonID] = buttonView;
 			}
 		}

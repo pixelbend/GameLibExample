@@ -1,17 +1,43 @@
 package test.screens.popupTest
 {
-	import test.screens.common.model.AbstractScreenProxy;
-	import test.screens.common.vo.IButtonDataVO;
-	import test.screens.popupTest.vo.PopupTestButtonVO;
+	import com.pixelBender.helpers.PopupHelpers;
+	import com.pixelBender.model.GameScreenProxy;
+	import com.pixelBender.model.vo.popup.PopupTranslucentLayerVO;
 
-	public class PopupTestProxy extends AbstractScreenProxy
+	import constants.Constants;
+
+	import test.screens.popupTest.vo.CustomizationStateVO;
+	import test.screens.popupTest.vo.PopupButtonVO;
+	import test.screens.popupTest.vo.PopupCustomizeResultViewVO;
+
+	import test.screens.popupTest.vo.PopupCustomizeViewVO;
+
+	public class PopupTestProxy extends GameScreenProxy
 	{
+		//==============================================================================================================
+		// CONSTANTS
+		//==============================================================================================================
+
+		public static const STACK_POPUPS								:String = "stackPopups";
+		public static const TRANSLUCENT_LAYER_ENABLED					:String = "translucentLayerEnabled";
+		public static const TRANSLUCENT_LAYER_COLOR						:String = "translucentLayerColor";
+		public static const TRANSLUCENT_LAYER_ALPHA						:String = "translucentLayerAlpha";
+
 		//==============================================================================================================
 		// MEMBERS
 		//==============================================================================================================
 
+		private var alphaIndex											:int;
 		private var translucentLayerAlphaValues							:Vector.<Number>;
+
+		private var colorIndex											:int;
 		private var translucentLayerColorValues							:Vector.<int>;
+
+		private var customizeVOs										:Vector.<PopupCustomizeViewVO>;
+		private var resultViewVO										:PopupCustomizeResultViewVO;
+
+		private var customizationStateVO								:CustomizationStateVO;
+		private var buttonVO											:PopupButtonVO;
 
 		//==============================================================================================================
 		// CONSTRUCTOR
@@ -20,20 +46,91 @@ package test.screens.popupTest
 		public function PopupTestProxy(proxyName:String, screenName:String, screenLogicXML:XML, screenAssetsXML:XML)
 		{
 			super(proxyName, screenName, screenLogicXML, screenAssetsXML);
+			customizationStateVO = new CustomizationStateVO();
 		}
 
 		//==============================================================================================================
 		// API
 		//==============================================================================================================
 
-		public function getTranslucentLayerAlphaValues():Vector.<Number>
+		public function getCustomizeVOs():Vector.<PopupCustomizeViewVO>
 		{
-			return translucentLayerAlphaValues.concat();
+			return customizeVOs;
 		}
 
-		public function getTranslucentLayerColorValues():Vector.<int>
+		public function getCustomizationStateVO():CustomizationStateVO
 		{
-			return translucentLayerColorValues.concat();
+			return customizationStateVO;
+		}
+
+		public function getResultViewVO():PopupCustomizeResultViewVO
+		{
+			return resultViewVO;
+		}
+
+		public function getButtonVO():PopupButtonVO
+		{
+			return buttonVO;
+		}
+
+		public function initializeState():void
+		{
+			var translucentLayerVO:PopupTranslucentLayerVO = customizationStateVO.getTranslucentLayerVO(),
+				actualState:PopupTranslucentLayerVO = PopupHelpers.getTranslucentLayerProperties();
+
+			alphaIndex = 0;
+			colorIndex = 0;
+
+			translucentLayerVO.setLayerEnabled(actualState.getLayerEnabled());
+			translucentLayerVO.setLayerColor(actualState.getLayerColor());
+			translucentLayerVO.setLayerAlpha(actualState.getLayerAlpha());
+
+			customizationStateVO.setStackPopups(PopupHelpers.getStackPopups());
+		}
+
+		public function changeState(propertyToChange:String):void
+		{
+			var translucentLayerVO:PopupTranslucentLayerVO = customizationStateVO.getTranslucentLayerVO();
+
+			switch (propertyToChange)
+			{
+				case STACK_POPUPS:
+					customizationStateVO.setStackPopups(!customizationStateVO.getStackPopups());
+					PopupHelpers.setStackPopups(customizationStateVO.getStackPopups());
+					break;
+				case TRANSLUCENT_LAYER_ENABLED:
+					translucentLayerVO.setLayerEnabled(!translucentLayerVO.getLayerEnabled());
+					PopupHelpers.setTranslucentLayerEnabled(translucentLayerVO.getLayerEnabled());
+					break;
+				case TRANSLUCENT_LAYER_COLOR:
+					colorIndex = (++colorIndex) % translucentLayerColorValues.length;
+					translucentLayerVO.setLayerColor(translucentLayerColorValues[colorIndex]);
+					PopupHelpers.setTranslucentLayerColor(translucentLayerVO.getLayerColor());
+					break;
+				case TRANSLUCENT_LAYER_ALPHA:
+					alphaIndex = (++alphaIndex) % translucentLayerAlphaValues.length;
+					translucentLayerVO.setLayerAlpha(translucentLayerAlphaValues[alphaIndex]);
+					PopupHelpers.setTranslucentLayerAlpha(translucentLayerVO.getLayerAlpha());
+					break;
+			}
+
+			facade.sendNotification(Constants.POPUP_CUSTOMIZATION_STATE_CHANGED, customizationStateVO);
+		}
+
+		//==============================================================================================================
+		// PUBLIC OVERRIDES
+		//==============================================================================================================
+
+		public override function dispose():void
+		{
+			translucentLayerAlphaValues = null;
+			translucentLayerColorValues = null;
+			customizeVOs = null;
+			customizationStateVO = null;
+			resultViewVO = null;
+			buttonVO = null;
+
+			super.dispose();
 		}
 
 		//==============================================================================================================
@@ -59,16 +156,40 @@ package test.screens.popupTest
 				translucentLayerColorValues.push(parseInt(String(node.@color)));
 			}
 
-			super.parseScreenLogicXML();
-		}
+			customizeVOs = new Vector.<PopupCustomizeViewVO>();
+			list = screenLogicXML.popupCustomizeViews.popupCustomizeView;
+			for each (node in list)
+			{
+				var viewVO:PopupCustomizeViewVO = new PopupCustomizeViewVO(
+																				parseFloat(String(node.@x)),
+																				parseFloat(String(node.@y)),
+																				parseFloat(String(node.@width)),
+																				parseFloat(String(node.@height)),
+																				String(node.@id),
+																				String(node.@type),
+																				String(node.@textID),
+																				String(node.@noteType)
+																			);
+				customizeVOs.push(viewVO);
+			}
 
-		protected override function parseButtonData(buttonDataXML:XML):IButtonDataVO
-		{
-			// Create button VO
-			return new PopupTestButtonVO(
-											String(buttonDataXML.@textID),
-											String(buttonDataXML.@commandName),
-											String(buttonDataXML.@popupName)
+			node = screenLogicXML.popupCustomizeResultView[0];
+			resultViewVO = new PopupCustomizeResultViewVO(
+																	parseFloat(String(node.@x)),
+																	parseFloat(String(node.@y)),
+																	parseFloat(String(node.@width)),
+																	parseFloat(String(node.@height)),
+																	String(node.@textID)
+															);
+
+			node = screenLogicXML.button[0];
+			buttonVO = new PopupButtonVO(
+												parseFloat(String(node.@x)),
+												parseFloat(String(node.@y)),
+												parseFloat(String(node.@width)),
+												parseFloat(String(node.@height)),
+												String(node.@textID),
+												String(node.@commandName)
 										);
 		}
 	}

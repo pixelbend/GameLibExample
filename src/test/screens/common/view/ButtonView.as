@@ -1,7 +1,5 @@
 package test.screens.common.view
 {
-	import com.pixelBender.constants.GameConstants;
-	import com.pixelBender.controller.game.component.GameComponent;
 	import com.pixelBender.helpers.StarlingHelpers;
 	import com.pixelBender.interfaces.IRunnable;
 
@@ -52,11 +50,14 @@ package test.screens.common.view
 			button = new Button(normalButtonTexture, text, downButtonTexture);
 			button.x = x;
 			button.y = y;
-			if (text && text.length > 0)
+			if (text != null && text.length > 0)
 			{
 				button.fontName = Constants.APPLICATION_FONT_REGULAR;
 				button.fontSize = fontSize;
 				button.fontColor = fontColor;
+			}
+			if (textBounds != null)
+			{
 				button.textBounds = textBounds;
 			}
 			container.addChild(button);
