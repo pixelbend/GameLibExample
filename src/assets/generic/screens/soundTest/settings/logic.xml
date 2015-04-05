@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <logic>
-    <buttonLayout fontSize="20" columns="5" width="0.1666666" height="0.2" ellipseDimension="0.2" horizontalGap="0.1666666"
-                  verticalGap="0.1" startX="0.0277777" startY="0.3"/>
 
-    <buttons>
-        <button textID="playVoice0"     noteName="_game__playSoundOnChannel"    soundName="voice0"     channelID="0"   priority="0" />
-        <button textID="playVoice1"     noteName="_game__playSoundOnChannel"    soundName="voice1"     channelID="0"   priority="1" />
-        <button textID="playSFX0"       noteName="_game__playSoundOnChannel"    soundName="sfx0"       channelID="1"   priority="0" />
-        <button textID="playSFX1"       noteName="_game__playSoundOnChannel"    soundName="sfx1"       channelID="1"   priority="1" />
-        <button textID="playAmbiance"   noteName="_game__playSoundOnChannel"    soundName="ambiance"   channelID="2"   priority="0" />
+    <testTitleLayout x="0" textWidth="0.2" textHeight="0.15" />
 
-        <button textID="pauseVoice"       noteName="_game__pauseResumeSoundOnChannel"       type="_type_pauseSound"   channelID="0" />
-        <button textID="pauseSFX"         noteName="_game__pauseResumeSoundOnChannel"       type="_type_pauseSound"   channelID="1"/>
-        <button textID="pauseAmbiance"    noteName="_game__pauseResumeSoundOnChannel"       type="_type_pauseSound"   channelID="2"/>
+    <testButtonLayout buttonWidth="0.1" buttonHeight="0.15">
+        <button x=".25" buttonID="play" linkage="buttonPlayLinkage"/>
+        <button x=".40" buttonID="pause" linkage="buttonPauseLinkage"/>
+        <button x=".55" buttonID="stop" linkage="buttonStopLinkage"/>
+    </testButtonLayout>
 
-        <button textID="resumeVoice"       noteName="_game__pauseResumeSoundOnChannel"    type="_type_resumeSound"   channelID="0"/>
-        <button textID="resumeSFX"         noteName="_game__pauseResumeSoundOnChannel"    type="_type_resumeSound"   channelID="1"/>
-        <button textID="resumeAmbiance"    noteName="_game__pauseResumeSoundOnChannel"    type="_type_resumeSound"   channelID="2"/>
+    <soundTestSetups>
+        <soundTestSetup setupID="voice" textID="playVoice" y=".4" soundID="voice0" channelID="0" />
+        <soundTestSetup setupID="sfx" textID="playSFX" y=".55" soundID="sfx0" channelID="1" />
+        <soundTestSetup setupID="ambiance" textID="playAmbiance" y=".70" soundID="ambiance" channelID="2" />
+    </soundTestSetups>
 
-        <button textID="stopVoice"      noteName="_game__stopSoundOnChannel"    channelID="0"/>
-        <button textID="stopSFX"        noteName="_game__stopSoundOnChannel"    channelID="1"/>
-        <button textID="stopAmbiance"   noteName="_game__stopSoundOnChannel"    channelID="2"/>
+    <stopAllSoundsView y=".85" textID="stopAllSounds" buttonLinkage="buttonStopAllLinkage" textWidth="0.2" textHeight="0.15" buttonX="0.25" buttonWidth="0.1" buttonHeight="0.15" />
 
-        <button textID="stopAll"        noteName="_game__stopSoundsOnAllChannels" />
-    </buttons>
+    <masterVolumeView x="0.7" y="0.4" width="0.3" height="0.5" textID="masterVolume" textHeight="0.2" scrollY="0.3" scrollHeight="0.7" />
+
 </logic>

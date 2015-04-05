@@ -1,28 +1,31 @@
-package test.screens.popupTest.vo
+package test.screens.soundTest.vo
 {
-	import constants.Constants;
+	import test.screens.common.vo.ViewVO;
 
-	import test.screens.common.vo.IButtonDataVO;
-
-	public class PopupTestButtonVO implements IButtonDataVO
+	public class MasterVolumeViewVO extends ViewVO
 	{
 		//==============================================================================================================
 		// MEMBERS
 		//==============================================================================================================
 
-		private var textID												:String;
-		private var commandName											:String;
-		private var popupName											:String;
+		private var textID								:String;
+		private var textHeight							:Number;
+		private var scrollY								:Number;
+		private var scrollHeight						:Number;
 
 		//==============================================================================================================
 		// CONSTRUCTOR
 		//==============================================================================================================
 
-		public function PopupTestButtonVO(textID:String, commandName:String, popupName:String)
+		public function MasterVolumeViewVO(x:Number, y:Number, width:Number, height:Number, textID:String, textHeight:Number,
+											scrollY:Number, scrollHeight:Number)
 		{
+			super(x, y, width, height);
+
 			this.textID = textID;
-			this.commandName = commandName;
-			this.popupName = popupName;
+			this.textHeight = textHeight;
+			this.scrollY = scrollY;
+			this.scrollHeight = scrollHeight;
 		}
 
 		//==============================================================================================================
@@ -34,19 +37,19 @@ package test.screens.popupTest.vo
 			return textID;
 		}
 
-		public function getCommandName():String
+		public function getTextHeight():Number
 		{
-			return commandName;
+			return textHeight;
 		}
 
-		public function getPopupName():String
+		public function getScrollY():Number
 		{
-			return popupName;
+			return scrollY;
 		}
 
-		public function getButtonGraphics():String
+		public function getScrollHeight():Number
 		{
-			return Constants.SIMPLE_BUTTON_GRAPHICS;
+			return scrollHeight;
 		}
 	}
 }

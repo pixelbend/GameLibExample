@@ -30,7 +30,7 @@ package test.screens.common.view
 			title = new TextField(gameSize.getWidth(), gameSize.getHeight() * 0.2,
 									LocalizationHelpers.getLocalizedText(mediatorName, "title"),
 										Constants.APPLICATION_FONT_BOLD, gameSize.getHeight() * 0.1, 0xFFFFFF, true);
-			title.y = gameSize.getHeight() * 0.1;
+			title.y = gameSize.getHeight() * 0.15;
 			container.addChild(title);
 		}
 
