@@ -25,7 +25,7 @@
             <text name="title"><![CDATA[SOUND CHECK]]></text>
             <text name="playVoice0"><![CDATA[Play voice 0 with priority 0]]></text>
             <text name="playVoice1"><![CDATA[Play voice 1 with priority 1]]></text>
-            <text name="playSFX0"><![CDATA[Play SFX 1 with priority 1]]></text>
+            <text name="playSFX0"><![CDATA[Play SFX 0 with priority 0]]></text>
             <text name="playSFX1"><![CDATA[Play SFX 1 with priority 1]]></text>
             <text name="playAmbiance"><![CDATA[Play ambiance]]></text>
             <text name="pauseVoice"><![CDATA[Pause current sound on voice channel]]></text>
