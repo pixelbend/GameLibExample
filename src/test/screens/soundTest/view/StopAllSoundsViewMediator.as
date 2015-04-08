@@ -104,16 +104,30 @@ package test.screens.soundTest.view
 					SoundHelpers.stopAllSoundsOnChannels();
 					break;
 				case SoundTestViewMediator.STARTED_SOUND_ON_CHANNEL:
-					playingSoundChannels++;
-					button.enable();
+					handleChannelStarted();
 					break;
 				case SoundTestViewMediator.STOPPED_SOUND_ON_CHANNEL:
-					playingSoundChannels--;
-					if (playingSoundChannels <= 0)
-					{
-						button.disable();
-					}
+					handleChannelStopped();
 					break;
+			}
+		}
+
+		//==============================================================================================================
+		// HANDLERS
+		//==============================================================================================================
+
+		private function handleChannelStarted():void
+		{
+			playingSoundChannels++;
+			button.enable();
+		}
+
+		private function handleChannelStopped():void
+		{
+			playingSoundChannels--;
+			if (playingSoundChannels <= 0)
+			{
+				button.disable();
 			}
 		}
 

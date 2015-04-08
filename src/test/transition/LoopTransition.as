@@ -17,8 +17,8 @@ package test.transition
 		// CONSTANTS
 		//==============================================================================================================
 
-		private const TRANSITION_MODULE_NAME							:String = "transition";
-		private const LOADING_TEXT_ID									:String = "loading";
+		private static const TRANSITION_MODULE_NAME							:String = "transition";
+		private static const LOADING_TEXT_ID								:String = "loading";
 
 		//==============================================================================================================
 		// MEMBERS
@@ -44,12 +44,13 @@ package test.transition
 
 		override protected function playTransition():void
 		{
-			super.playTransition();
-			if (loadingText.text == "")
+			var localizedText:String = LocalizationHelpers.getLocalizedText(TRANSITION_MODULE_NAME, LOADING_TEXT_ID);
+			if (localizedText != loadingText.text)
 			{
-				loadingText.text = LocalizationHelpers.getLocalizedText(TRANSITION_MODULE_NAME, LOADING_TEXT_ID);
+				loadingText.text = localizedText;
 			}
 			transitionView.addChild(loadingText);
+			super.playTransition();
 		}
 
 		override protected function stopTransition():void

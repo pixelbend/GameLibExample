@@ -93,23 +93,31 @@ package test.screens.soundTest.view
 		private function handleThumbTouch(event:TouchEvent):void
 		{
 			var touch:Touch = event.getTouch(thumb);
-			if (touch != null)
+			if (touch == null) return;
+			switch (touch.phase)
 			{
-				switch (touch.phase)
-				{
-					case TouchPhase.BEGAN:
-						currentPoint.y = touch.globalY;
-						break;
-					case TouchPhase.MOVED:
-						var diff:Number = touch.globalY - currentPoint.y,
-							valueToSend:Number;
-						thumb.y = MathHelpers.clamp(thumb.y + diff, thumbMinY, thumbMaxY);
-						valueToSend = 1 - ((thumb.y - thumbMinY) / thumbMaxDiff);
-						currentPoint.y = touch.globalY;
-						TestGameFacade.getInstance().sendNotification(VOLUME_CHANGED, valueToSend);
-						break;
-				}
+				case TouchPhase.BEGAN:
+					handleTouchBegan(touch);
+					break;
+				case TouchPhase.MOVED:
+					handleTouchMoved(touch);
+					break;
 			}
+		}
+
+		private function handleTouchBegan(touch:Touch):void
+		{
+			currentPoint.y = touch.globalY;
+		}
+
+		private function handleTouchMoved(touch:Touch):void
+		{
+			var diff:Number = touch.globalY - currentPoint.y,
+					valueToSend:Number;
+			thumb.y = MathHelpers.clamp(thumb.y + diff, thumbMinY, thumbMaxY);
+			valueToSend = 1 - ((thumb.y - thumbMinY) / thumbMaxDiff);
+			currentPoint.y = touch.globalY;
+			TestGameFacade.getInstance().sendNotification(VOLUME_CHANGED, valueToSend);
 		}
 
 		//==============================================================================================================

@@ -22,7 +22,7 @@ package test.screens.localeTest
 
 		private const LANGUAGES						:Vector.<String> = new <String> [
 																						Constants.LANGUAGE_ENGLISH,
-																						Constants.LANGUAGE_FRENCH
+																						Constants.LANGUAGE_ROMANIAN
 																					];
 
 		//==============================================================================================================
@@ -92,13 +92,6 @@ package test.screens.localeTest
 		// NOTIFICATION/CALLBACK HANDLERS
 		//==============================================================================================================
 
-		protected override function handleBackTriggered():void
-		{
-			languageIndex = 0;
-			facade.sendNotification(GameConstants.CHANGE_APPLICATION_LOCALE, LANGUAGES[languageIndex]);
-			super.handleBackTriggered();
-		}
-
 		protected override function handleTestButtonTriggered(testButtonData:Object):void
 		{
 			var data:LocaleTestButtonVO = testButtonData as LocaleTestButtonVO;
@@ -113,7 +106,7 @@ package test.screens.localeTest
 		private function handleChangeLanguage():void
 		{
 			++languageIndex;
-			facade.sendNotification(GameConstants.CHANGE_APPLICATION_LOCALE, LANGUAGES[languageIndex % LANGUAGES.length]);
+			LocalizationHelpers.changeLocale(LANGUAGES[languageIndex % LANGUAGES.length]);
 			ScreenHelpers.showScreen(mediatorName, Constants.TRANSITION_SEQUENCE_NAME);
 		}
 
@@ -130,7 +123,7 @@ package test.screens.localeTest
 					localizedText:String = LocalizationHelpers.getLocalizedText(mediatorName, "currentLanguage") +
 												LocalizationHelpers.getCurrentLocale().toUpperCase();
 
-			currentLanguageText = new TextField(width, height, localizedText, "Tahoma", 40);
+			currentLanguageText = new TextField(width, height, localizedText, Constants.APPLICATION_FONT_REGULAR, 40);
 			currentLanguageText.x = 0;
 			currentLanguageText.y = halfScreenHeight;
 			starlingGameScreen.addChild(currentLanguageText);
@@ -146,6 +139,8 @@ package test.screens.localeTest
 			languageImage = Image.fromBitmap(picture);
 			languageImage.x = halfScreenWidth;
 			languageImage.y = halfScreenHeight;
+			languageImage.scaleX = (gameSize.getWidth() * 0.33) / languageImage.width;
+			languageImage.scaleY = (gameSize.getHeight()* 0.33) / languageImage.height;
 			starlingGameScreen.addChild(languageImage);
 		}
 	}

@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <localeTexts>
 	<locale name="en">
-        <!-- Common texts -->
-        <module name="common">
-            <text name="back"><![CDATA[Back]]></text>
-        </module>
         <!-- Transition texts -->
         <module name="transition">
             <text name="loading"><![CDATA[Loading]]></text>
@@ -50,11 +46,6 @@
         <module name="_game__popupTestScreen">
             <text name="title"><![CDATA[POPUP]]></text>
             <text name="openTestPopup"><![CDATA[Open test popup]]></text>
-            <text name="switchStackPopups"><![CDATA[Switch stack popups]]></text>
-            <text name="switchTranslucentLayerEnabled"><![CDATA[Switch popup translucent layer enabled]]></text>
-            <text name="changeTranslucentLayerAlpha"><![CDATA[Change popup translucent layer alpha]]></text>
-            <text name="changeTranslucentLayerColor"><![CDATA[Change popup translucent layer color]]></text>
-
             <text name="stackPopups"><![CDATA[Stack popups enabled]]></text>
             <text name="translucentLayerEnabled"><![CDATA[Translucent layer enabled]]></text>
             <text name="translucentLayerColor"><![CDATA[Translucent layer color]]></text>
@@ -77,12 +68,72 @@
             <text name="title"><![CDATA[Second popup]]></text>
         </module>
 	</locale>
-    <locale name="fr">
+    <locale name="ro">
+        <!-- Transition texts -->
+        <module name="transition">
+            <text name="loading"><![CDATA[Se incarca]]></text>
+        </module>
+        <!-- Intro screen texts -->
+        <module name="_game__introScreen">
+            <text name="title"><![CDATA[SALUT!]]></text>
+            <text name="subTitle"><![CDATA[Apasa orice buton]]></text>
+            <text name="_game__soundTestScreen"><![CDATA[Test pentru sunet]]></text>
+            <text name="_game__soundQueueTestScreen"><![CDATA[Test pentru coada de sunete]]></text>
+            <text name="_game__fileReferenceTestScreen"><![CDATA[Test pentru fisiere stocate]]></text>
+            <text name="_game__tweenTestScreen"><![CDATA[Test pentru tween]]></text>
+            <text name="_game__popupTestScreen"><![CDATA[Test pentru popup]]></text>
+            <text name="_game__localeTestScreen"><![CDATA[Test pentru localizare]]></text>
+        </module>
+        <!-- Sound test screen texts -->
+        <module name="_game__soundTestScreen">
+            <text name="title"><![CDATA[SUNET]]></text>
+            <text name="playVoice"><![CDATA[Porneste o voce]]></text>
+            <text name="playSFX"><![CDATA[Porneste un SFX]]></text>
+            <text name="playAmbiance"><![CDATA[Porneste ambianta]]></text>
+            <text name="stopAllSounds"><![CDATA[Opreste toate sunetele]]></text>
+            <text name="masterVolume"><![CDATA[Volumul principal]]></text>
+        </module>
+        <!-- Sound queue test screen texts -->
+        <module name="_game__soundQueueTestScreen">
+            <text name="title"><![CDATA[COADA DE SUNETE]]></text>
+            <text name="voiceQueue"><![CDATA[Coada de sunete de voce]]></text>
+            <text name="sfxQueue"><![CDATA[Coada de sunete de SFX]]></text>
+        </module>
+        <!-- File reference test screen texts -->
+        <module name="_game__fileReferenceTestScreen">
+            <text name="title"><![CDATA[FISIER STOCAT]]></text>
+        </module>
+        <!-- Tween test screen texts -->
+        <module name="_game__tweenTestScreen">
+            <text name="title"><![CDATA[TWEEN]]></text>
+            <text name="move"><![CDATA[Tween de miscare]]></text>
+            <text name="scale"><![CDATA[Tween de scalare]]></text>
+            <text name="resetTarget"><![CDATA[Reseteaza]]></text>
+        </module>
+        <!-- Tween test screen texts -->
+        <module name="_game__popupTestScreen">
+            <text name="title"><![CDATA[POPUP]]></text>
+            <text name="openTestPopup"><![CDATA[Deschide primul popup]]></text>
+            <text name="stackPopups"><![CDATA[Stiva de popup-uri activata]]></text>
+            <text name="translucentLayerEnabled"><![CDATA[Stratul translucent activat]]></text>
+            <text name="translucentLayerColor"><![CDATA[Culoarea stratului translucent]]></text>
+            <text name="translucentLayerAlpha"><![CDATA[Transparenta stratului translucent]]></text>
+            <text name="translucentLayerPreview"><![CDATA[Stratul translucent rezultat]]></text>
+        </module>
         <!-- Locale test screen texts -->
         <module name="_game__localeTestScreen">
-            <text name="title"><![CDATA[LANGUE]]></text>
-            <text name="currentLanguage"><![CDATA[Langue courant: ]]></text>
-            <text name="changeLanguage"><![CDATA[Changer de langue]]></text>
+            <text name="title"><![CDATA[LOCALIZARE]]></text>
+            <text name="currentLanguage"><![CDATA[Limba curenta: ]]></text>
+            <text name="changeLanguage"><![CDATA[Schimba limba]]></text>
+        </module>
+        <!-- Open other popup texts -->
+        <module name="_game__firstPopup">
+            <text name="title"><![CDATA[Primul popup]]></text>
+            <text name="openSecondPopup"><![CDATA[Deschide al doilea popup]]></text>
+        </module>
+        <!-- Test popup texts -->
+        <module name="_game__secondPopup">
+            <text name="title"><![CDATA[Al doilea popup]]></text>
         </module>
     </locale>
 </localeTexts>

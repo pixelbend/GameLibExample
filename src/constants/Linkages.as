@@ -19,7 +19,7 @@ package constants
 	public class Linkages
 	{
 		// Fonts
-		[Embed(source = "../assets/generic/global/fonts/voniqueRegular.ttf",
+		[Embed(source = "../assets/generic/global/fonts/neoteric.ttf",
 				fontName = "ApplicationRegular",
 				mimeType = "application/x-font",
 				fontWeight="Regular",

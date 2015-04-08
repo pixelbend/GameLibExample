@@ -78,6 +78,6 @@ package constants
 		//==============================================================================================================
 
 		public static const LANGUAGE_ENGLISH							:String = "en";
-		public static const LANGUAGE_FRENCH								:String = "fr";
+		public static const LANGUAGE_ROMANIAN							:String = "ro";
 	}
 }
