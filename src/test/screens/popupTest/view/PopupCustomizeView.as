@@ -61,7 +61,7 @@ package test.screens.popupTest.view
 
 			containerBounds = new Rectangle(container.x, container.y, containerWidth, containerHeight);
 
-			name = new TextField(containerWidth * 0.5, containerHeight, text, Constants.APPLICATION_FONT_BOLD, containerHeight * 0.07, 0xFFFFFF, true);
+			name = new TextField(containerWidth * 0.5, containerHeight, text, Constants.APPLICATION_FONT_REGULAR, containerHeight * 0.1, 0xFFFFFF, true);
 			container.addChild(name);
 		}
 

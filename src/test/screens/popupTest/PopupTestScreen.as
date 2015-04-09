@@ -287,7 +287,7 @@ package test.screens.popupTest
 				buttonHeight:int = gameSize.getHeight() * buttonVO.getHeight(),
 				buttonTextures:Vector.<Texture> = getGraphicsTextures("buttonLinkage", 2, buttonWidth, buttonHeight),
 				buttonText:String = LocalizationHelpers.getLocalizedText(mediatorName, buttonVO.getTextID()),
-				buttonFontSize:int = buttonHeight * 0.15;
+				buttonFontSize:int = buttonHeight * 0.2;
 
 			openPopupButton = new ButtonView(mediatorName, null);
 			openPopupButton.createButton(starlingGameScreen, buttonTextures[0], buttonTextures[1], buttonText, null, buttonX, buttonY, buttonFontSize, 0xFFFFFF)

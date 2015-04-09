@@ -2,11 +2,14 @@ package test.popups
 {
 	import com.pixelBender.helpers.PopupHelpers;
 	import com.pixelBender.model.AssetProxy;
+	import com.pixelBender.model.PopupProxy;
 	import com.pixelBender.model.vo.game.GameSizeVO;
 	import com.pixelBender.view.popup.StarlingPopup;
 	import constants.Constants;
 	import org.puremvc.as3.interfaces.INotification;
 	import starling.display.DisplayObjectContainer;
+
+	import test.popups.model.TestPopupProxy;
 	import test.popups.view.PopupBaseView;
 	import test.popups.vo.PopupConfigurationVO;
 
@@ -16,7 +19,7 @@ package test.popups
 		// MEMBERS
 		//==============================================================================================================
 
-		protected var configurationVO								:PopupConfigurationVO;
+		protected var testPopupProxy								:TestPopupProxy;
 		protected var backgroundView								:PopupBaseView;
 
 		//==============================================================================================================
@@ -39,7 +42,7 @@ package test.popups
 		 */
 		public override function prepareForOpen(container:DisplayObjectContainer, assetProxy:AssetProxy):void
 		{
-			backgroundView = new PopupBaseView(container, configurationVO, mediatorName, gameFacade);
+			backgroundView = new PopupBaseView(container, testPopupProxy.getConfigurationVO(), mediatorName, gameFacade);
 		}
 
 		/**
@@ -89,7 +92,7 @@ package test.popups
 
 		public override function dispose():void
 		{
-			configurationVO = null;
+			testPopupProxy = null;
 		}
 
 		//==============================================================================================================
@@ -114,22 +117,13 @@ package test.popups
 		}
 
 		//==============================================================================================================
-		// NEEDED PROTECTED OVERRIDES
+		// PROTECTED OVERRIDES
 		//==============================================================================================================
 
-		protected override function parseLogicXML():void
+		protected override function createPopupProxy():PopupProxy
 		{
-			var gameSize:GameSizeVO = gameFacade.getApplicationSize(),
-				popupWidth:int = parseFloat(String(logicXML.@width)) * gameSize.getWidth(),
-				popupHeight:int = parseFloat(String(logicXML.@height)) * gameSize.getHeight();
-
-			configurationVO = new PopupConfigurationVO(
-															(gameSize.getWidth() - popupWidth) >> 1,
-															(gameSize.getHeight() - popupHeight) >> 1,
-															popupWidth,
-															popupHeight,
-															parseInt(String(logicXML.@color))
-														);
+			testPopupProxy = new TestPopupProxy(mediatorName);
+			return testPopupProxy;
 		}
 	}
 }

@@ -10,7 +10,11 @@ package test.popups.view
 	import constants.Constants;
 
 	import flash.display.BitmapData;
+	import flash.display.MovieClip;
 	import flash.display.Sprite;
+	import flash.geom.Matrix;
+	import flash.system.ApplicationDomain;
+
 	import starling.display.Button;
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Sprite;
@@ -161,23 +165,38 @@ package test.popups.view
 		protected function createCloseButton(container:DisplayObjectContainer, configurationVO:PopupConfigurationVO):void
 		{
 			// Internals
-			var vectorSprite:flash.display.Sprite = new flash.display.Sprite(),
-				size:int = configurationVO.getWidth() * 0.15,
-				bitmapData:BitmapData = new BitmapData(size, size, true, 0x0),
-				closeButtonTexture:Texture;
-			// Draw from vector
-			vectorSprite.graphics.lineStyle(size >> 2, 0xFF0000, 1);
-			vectorSprite.graphics.moveTo(0, 0);
-			vectorSprite.graphics.lineTo(size, size);
-			vectorSprite.graphics.moveTo(0, size);
-			vectorSprite.graphics.lineTo(size, 0);
-			bitmapData.draw(vectorSprite, null, null, null, null, true);
-			closeButtonTexture = Texture.fromBitmapData(bitmapData, false);
+			var size:int = configurationVO.getWidth() * 0.1,
+				buttonTextures:Vector.<Texture> = getButtonTextures(2, "buttonCloseLinkage", size);
 			// Add to container
-			closeButton = new Button(closeButtonTexture);
+			closeButton = new Button(buttonTextures[0], "", buttonTextures[1]);
 			container.addChild(closeButton);
 			closeButton.x = configurationVO.getX() + configurationVO.getWidth() - closeButton.width - (closeButton.width >> 2);
 			closeButton.y = configurationVO.getY() + (closeButton.height >> 2);
+		}
+
+		protected static function getButtonTextures(numberOfFrames:int, buttonGraphicsLinkage:String, buttonSize:int):Vector.<Texture>
+		{
+			var buttonClass:Class,
+				buttonGraphics:MovieClip,
+				bitmapData:BitmapData,
+				matrix:Matrix = new Matrix(),
+				buttonTextures:Vector.<Texture>;
+
+			buttonClass = ApplicationDomain.currentDomain.getDefinition(buttonGraphicsLinkage) as Class;
+			buttonGraphics = new buttonClass();
+			buttonTextures = new Vector.<Texture>(numberOfFrames, true);
+
+			for (var i:int=0; i<buttonTextures.length; i++)
+			{
+				matrix.identity();
+				buttonGraphics.gotoAndStop(i+1);
+				matrix.scale(buttonSize/buttonGraphics.width, buttonSize/buttonGraphics.height);
+				bitmapData = new BitmapData(buttonSize, buttonSize, true, 0x00000000);
+				bitmapData.draw(buttonGraphics, matrix, null, null, null, true);
+				buttonTextures[i] = Texture.fromBitmapData(bitmapData, false);
+			}
+
+			return buttonTextures;
 		}
 	}
 }

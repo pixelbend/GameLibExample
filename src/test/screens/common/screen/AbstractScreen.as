@@ -160,7 +160,6 @@ package test.screens.common.screen
 			const 	gameSize:GameSizeVO = gameFacade.getApplicationSize(),
 					layout:ButtonLayoutVO = screenProxy.getButtonLayout(),
 					buttonData:Vector.<IButtonDataVO> = screenProxy.getButtonsData(),
-					buttonFontSize:int = layout.getFontSize(),
 					buttonsPerRow:int = layout.getColumns(),
 					buttonWidth:int = gameSize.getWidth() * layout.getWidth(),
 					buttonHeight:int = gameSize.getHeight() * layout.getHeight(),
@@ -169,13 +168,14 @@ package test.screens.common.screen
 					startX:int = starlingGameScreen.stage.stageWidth * layout.getStartX(),
 					startY:int = starlingGameScreen.stage.stageHeight * layout.getStartY(),
 					buttonLength:int = buttonData.length,
+					buttonFontSize:int = buttonHeight * 0.25,
 					buttonTextBounds:Rectangle = new Rectangle();
 
 			// Compute text bounds
-			buttonTextBounds.x = buttonWidth * 0.15;
-			buttonTextBounds.y = buttonHeight * 0.15;
-			buttonTextBounds.width = buttonWidth * 0.7;
-			buttonTextBounds.height = buttonHeight * 0.7;
+			buttonTextBounds.x = buttonWidth * 0.05;
+			buttonTextBounds.y = buttonHeight * 0.05;
+			buttonTextBounds.width = buttonWidth * 0.85;
+			buttonTextBounds.height = buttonHeight * 0.85;
 
 			Logger.debug(this + "Button common computation took: " + (getTimer()-t) + " ms.");
 

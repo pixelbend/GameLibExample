@@ -66,5 +66,6 @@ package constants
 		backButtonLinkage;
 		checkBoxLinkage;
 		buttonStopAllLinkage;
+		buttonCloseLinkage;
 	}
 }

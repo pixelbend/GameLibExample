@@ -37,7 +37,7 @@ package test.popups
 		public override function prepareForOpen(container:DisplayObjectContainer, assetProxy:AssetProxy):void
 		{
 			super.prepareForOpen(container, assetProxy);
-			openSecondPopupView = new OpenSecondPopupView(container, configurationVO, mediatorName, gameFacade);
+			openSecondPopupView = new OpenSecondPopupView(container, testPopupProxy.getConfigurationVO(), mediatorName, gameFacade);
 		}
 
 		public override function open():void

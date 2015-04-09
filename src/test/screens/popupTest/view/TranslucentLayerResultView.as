@@ -44,7 +44,7 @@ package test.screens.popupTest.view
 				containerHeight:int = vo.getHeight() * gameSize.getHeight(),
 				text:String = LocalizationHelpers.getLocalizedText(localizationModule, vo.getTextID());
 
-			name = new TextField(containerWidth * 0.5, containerHeight, text, Constants.APPLICATION_FONT_BOLD, containerHeight * 0.07, 0xFFFFFF, true);
+			name = new TextField(containerWidth * 0.5, containerHeight, text, Constants.APPLICATION_FONT_REGULAR, containerHeight * 0.1, 0xFFFFFF, true);
 			container.addChild(name);
 
 			var bitmapData:BitmapData = new BitmapData(imageSize, imageSize, false, 0xFFFFFF);
