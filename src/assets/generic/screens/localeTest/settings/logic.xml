@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <logic>
+    <availableLocales>
+        <locale id="en" />
+        <locale id="ro" />
+    </availableLocales>
+
     <button x="0.02" y="0.35" width="0.2" height="0.2" textID="changeLanguage" />
 </logic>

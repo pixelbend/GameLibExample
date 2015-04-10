@@ -199,7 +199,7 @@ package test.screens.intro
 				}
 				textures = buttonTextures[buttonData[i].getButtonGraphics()];
 
-				testButtons[i] = new ButtonView(mediatorName, buttonData[i]);
+				testButtons[i] = new ButtonView(mediatorName + ButtonView.BUTTON_TRIGGERED, buttonData[i]);
 				testButtons[i].createButton(starlingGameScreen,
 											textures[0],
 											textures[1],

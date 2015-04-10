@@ -48,25 +48,6 @@ package constants
 		public static const SECOND_POPUP_NAME							:String = "_game__secondPopup";
 
 		//==============================================================================================================
-		// SOUND QUEUE TEST COMMANDS
-		//==============================================================================================================
-
-		public static const START_SOUND_QUEUE							:String = "_game__startQueuePlayer";
-		public static const PAUSE_SOUND_QUEUE							:String = "_game__pauseQueuePlayer";
-		public static const RESUME_SOUND_QUEUE							:String = "_game__resumeQueuePlayer";
-		public static const STOP_SOUND_QUEUE							:String = "_game__stopQueuePlayer";
-
-		//==============================================================================================================
-		// TWEEN TEST CONSTANTS
-		//==============================================================================================================
-
-		public static const START_TWEEN									:String = "_game__startTween";
-		public static const PAUSE_TWEEN									:String = "_game__pauseTween";
-		public static const RESUME_TWEEN								:String = "_game__resumeTween";
-		public static const STOP_TWEEN									:String = "_game__stopTween";
-		public static const RESET_TARGET								:String = "_game__resetTarget";
-
-		//==============================================================================================================
 		// POPUP TEST CONSTANTS
 		//==============================================================================================================
 
@@ -79,5 +60,6 @@ package constants
 
 		public static const LANGUAGE_ENGLISH							:String = "en";
 		public static const LANGUAGE_ROMANIAN							:String = "ro";
+		public static const SWITCH_LOCALE								:String = LOCALE_TEST_SCREEN + "_switchLocale";
 	}
 }

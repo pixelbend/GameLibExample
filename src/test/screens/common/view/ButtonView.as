@@ -34,9 +34,9 @@ package test.screens.common.view
 		// CONSTRUCTOR
 		//==============================================================================================================
 
-		public function ButtonView(mediatorName:String, buttonData:Object)
+		public function ButtonView(notificationName:String, buttonData:Object)
 		{
-			this.notificationName = mediatorName + BUTTON_TRIGGERED;
+			this.notificationName = notificationName;
 			this.buttonData = buttonData;
 		}
 

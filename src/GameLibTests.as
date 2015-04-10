@@ -188,7 +188,7 @@ package
 			gameStarling.stage.stageHeight = stage.fullScreenHeight;
 			if (gameFacade != null)
 			{
-				gameFacade.handleGameResized(stage.fullScreenHeight/Constants.HEIGHT);
+				gameFacade.handleGameResized(stage.fullScreenWidth, stage.fullScreenHeight, stage.fullScreenHeight/Constants.HEIGHT);
 			}
 		}
 
@@ -285,7 +285,7 @@ package
 			// Initialize
 			gameFacade.init(this, new XML(embeddedLogicXML.data), new XML(embeddedAssetsXML.data), handleGameReady,
 								null, StarlingRootContainer.instance, null, Constants.LANGUAGE_ENGLISH);
-			gameFacade.handleGameResized(stage.fullScreenHeight/Constants.HEIGHT);
+			gameFacade.handleGameResized(stage.fullScreenWidth, stage.fullScreenHeight, stage.fullScreenHeight/Constants.HEIGHT);
 			// Start loading assets. We will handle first screen load on our own
 			gameFacade.sendNotification(GameConstants.LOAD_ASSET_QUEUE);
 		}
