@@ -101,7 +101,7 @@ package test.screens.soundTest.view
 			switch (notification.getName())
 			{
 				case mediatorName + TestButtonView.BUTTON_TRIGGERED:
-					SoundHelpers.stopAllSoundsOnChannels();
+					handleStopAllSounds();
 					break;
 				case SoundTestViewMediator.STARTED_SOUND_ON_CHANNEL:
 					handleChannelStarted();
@@ -115,6 +115,13 @@ package test.screens.soundTest.view
 		//==============================================================================================================
 		// HANDLERS
 		//==============================================================================================================
+
+		private function handleStopAllSounds():void
+		{
+			SoundHelpers.stopAllSoundsOnChannels();
+			playingSoundChannels = 0;
+			button.disable();
+		}
 
 		private function handleChannelStarted():void
 		{

@@ -162,12 +162,12 @@ package test.screens.soundTest.view
 			else
 			{
 				soundPlaying = true;
+				facade.sendNotification(STARTED_SOUND_ON_CHANNEL, channelID);
 				SoundHelpers.playSound(soundID, channelID, handleSoundCompleted);
 			}
 			if (soundPlaying)
 			{
 				enableButtons(ACTION_PAUSE, ACTION_STOP);
-				facade.sendNotification(STARTED_SOUND_ON_CHANNEL, channelID);
 			}
 		}
 
