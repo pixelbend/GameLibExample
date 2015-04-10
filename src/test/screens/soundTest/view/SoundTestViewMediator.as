@@ -111,6 +111,7 @@ package test.screens.soundTest.view
 			container = null;
 			name = null;
 			buttons = null;
+			soundPlaying = false;
 		}
 
 		//==============================================================================================================
@@ -154,8 +155,15 @@ package test.screens.soundTest.view
 
 		private function playSound():void
 		{
-			soundPlaying = true;
-			SoundHelpers.playSound(soundID, channelID, handleSoundCompleted);
+			if (soundPlaying)
+			{
+				SoundHelpers.resumeSoundOnChannel(channelID);
+			}
+			else
+			{
+				soundPlaying = true;
+				SoundHelpers.playSound(soundID, channelID, handleSoundCompleted);
+			}
 			if (soundPlaying)
 			{
 				enableButtons(ACTION_PAUSE, ACTION_STOP);
