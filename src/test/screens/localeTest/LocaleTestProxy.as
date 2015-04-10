@@ -1,11 +1,18 @@
 package test.screens.localeTest
 {
-	import test.screens.common.model.AbstractScreenProxy;
+	import com.pixelBender.model.GameScreenProxy;
+
 	import test.screens.common.vo.IButtonDataVO;
 	import test.screens.localeTest.vo.LocaleTestButtonVO;
 
-	public class LocaleTestProxy extends AbstractScreenProxy
+	public class LocaleTestProxy extends GameScreenProxy
 	{
+		//==============================================================================================================
+		// MEMBERS
+		//==============================================================================================================
+
+		private var buttonVO									:LocaleTestButtonVO;
+
 		//==============================================================================================================
 		// CONSTRUCTOR
 		//==============================================================================================================
@@ -16,13 +23,43 @@ package test.screens.localeTest
 		}
 
 		//==============================================================================================================
+		// API
+		//==============================================================================================================
+
+		public function getButtonVO():LocaleTestButtonVO
+		{
+			return buttonVO;
+		}
+
+		//==============================================================================================================
+		// PUBLIC OVERRIDES
+		//==============================================================================================================
+
+		public override function dispose():void
+		{
+			buttonVO = null;
+			super.dispose();
+		}
+
+		//==============================================================================================================
 		// PROTECTED OVERRIDES
 		//==============================================================================================================
 
-		protected override function parseButtonData(buttonDataXML:XML):IButtonDataVO
+		//==============================================================================================================
+		// PROTECTED OVERRIDES
+		//==============================================================================================================
+
+		protected override function parseScreenLogicXML():void
 		{
-			// Create button VO
-			return new LocaleTestButtonVO(String(buttonDataXML.@textID), String(buttonDataXML.@commandName));
+			var node:XML = screenLogicXML.button[0];
+			buttonVO = new LocaleTestButtonVO(
+									parseFloat(String(node.@x)),
+									parseFloat(String(node.@y)),
+									parseFloat(String(node.@width)),
+									parseFloat(String(node.@height)),
+									String(node.@textID),
+									String(node.@commandName)
+							);
 		}
 	}
 }

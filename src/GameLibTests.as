@@ -1,29 +1,28 @@
 package
 {
 	import com.pixelBender.constants.GameConstants;
-	import com.pixelBender.helpers.IRunnableHelpers;
-	import com.pixelBender.helpers.MovieClipHelpers;
-	import com.pixelBender.helpers.StarlingHelpers;
 	import com.pixelBender.interfaces.IRunnable;
-	import com.pixelBender.model.vo.game.GameSizeVO;
+
 	import constants.Constants;
 	import constants.Linkages;
 	import flash.desktop.NativeApplication;
 	import flash.desktop.SystemIdleMode;
-	import flash.display.BitmapData;
-	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
-	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
+	import flash.system.System;
 	import flash.ui.Keyboard;
+	import flash.utils.getTimer;
+
 	import starling.StarlingRootContainer;
 	import starling.core.Starling;
 	import starling.events.Event;
-	import stats.Stats;
+	import starling.utils.HAlign;
+	import starling.utils.VAlign;
+
 	import test.facade.TestGameFacade;
 	import test.globalView.GlobalView;
 
@@ -46,11 +45,6 @@ package
 
 		CONFIG::debug
 		{
-			/**
-			 * The FPS/memory minimal statistics
-			 */
-			private var debugStats															:Stats;
-
 			/**
 			 * Debug view for a possible control of GameFacade core states: pause/resume/dispose
 			 */
@@ -128,21 +122,29 @@ package
 			if (stage != null)
 			{
 				stage.removeEventListener(flash.events.Event.RESIZE, handleStageResize);
+				stage.removeEventListener(KeyboardEvent.KEY_DOWN, handleKeys);
 			}
-			IRunnableHelpers.dispose([gameStarling, gameFacade]);
-
-			gameStarling = null;
-			gameFacade = null;
-			CONFIG::debug
+			CONFIG::mobile
 			{
-				if (debugView != null)
-				{
-					debugView.dispose();
-					debugView = null;
-				}
-				MovieClipHelpers.removeFromParent(debugStats);
-				debugStats = null;
+				NativeApplication.nativeApplication.removeEventListener(flash.events.Event.DEACTIVATE, handleDeactivate);
+				NativeApplication.nativeApplication.removeEventListener(flash.events.Event.ACTIVATE, handleActivate);
 			}
+			if (gameFacade != null)
+			{
+				gameFacade.dispose();
+				gameFacade = null;
+			}
+			if (debugView != null)
+			{
+				debugView.dispose();
+				debugView = null;
+			}
+			if (gameStarling != null)
+			{
+				gameStarling.dispose();
+				gameStarling = null;
+			}
+			System.gc();
 		}
 
 		public function testPause():void
@@ -163,15 +165,13 @@ package
 
 		public function testDispose():void
 		{
-			if (gameFacade != null)
-			{
-				gameFacade.dispose();
-				gameFacade = null;
-			}
+			dispose();
+			// Check the memory after app dispose
+			addEventListener(flash.events.Event.ENTER_FRAME, handleFrameUpdate, false, 0, true);
 		}
 
 		//==============================================================================================================
-		// LOCALS
+		// HANDLERS
 		//==============================================================================================================
 
 		private function handleAddedToStage(e:flash.events.Event):void
@@ -183,19 +183,9 @@ package
 
 		private function handleStageResize(e:flash.events.Event):void
 		{
-			// Update starling viewport
 			Starling.current.viewPort = new Rectangle(0, 0, stage.fullScreenWidth, stage.fullScreenHeight);
-			// Update starling stage as well
 			gameStarling.stage.stageWidth = stage.fullScreenWidth;
 			gameStarling.stage.stageHeight = stage.fullScreenHeight;
-			// Update debug state position
-			CONFIG::debug
-			{
-				if (debugStats != null)
-				{
-					debugStats.x = stage.fullScreenWidth - debugStats.width;
-				}
-			}
 			if (gameFacade != null)
 			{
 				gameFacade.handleGameResized(stage.fullScreenHeight/Constants.HEIGHT);
@@ -248,16 +238,6 @@ package
 			initializeFacade();
 			// Force resize on initial values
 			handleStageResize(null);
-			CONFIG::debug
-			{
-				//gameStarling.showStatsAt(HAlign.RIGHT, VAlign.TOP, gameFacade.getApplicationSize().getScale() * 1.5);
-				// Stats
-				var gameSize:GameSizeVO = gameFacade.getApplicationSize();
-				debugStats = new Stats();
-				debugStats.scaleX = debugStats.scaleY = gameSize.getScale() * 2;
-				addChild(debugStats);
-				debugStats.x = gameSize.getWidth() - debugStats.width;
-			}
 		}
 
 		private function handleGameReady():void
@@ -282,11 +262,15 @@ package
 			gameStarling = new Starling(StarlingRootContainer, stage, null, null, "auto", "auto");
 			gameStarling.addEventListener(starling.events.Event.ROOT_CREATED, handleStarlingRootCreated);
 			gameStarling.antiAliasing = 1;
+			CONFIG::debug
+			{
+				gameStarling.showStatsAt(HAlign.RIGHT, VAlign.TOP, 2);
+			}
 			// Mobile stuff
 			CONFIG::mobile
 			{
 				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
-				this.stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeys, false, 0, true);
+				stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeys, false, 0, true);
 				NativeApplication.nativeApplication.addEventListener(flash.events.Event.DEACTIVATE, handleDeactivate, false, 0, true);
 				NativeApplication.nativeApplication.addEventListener(flash.events.Event.ACTIVATE, handleActivate, false, 0, true);
 			}
@@ -304,6 +288,24 @@ package
 			gameFacade.handleGameResized(stage.fullScreenHeight/Constants.HEIGHT);
 			// Start loading assets. We will handle first screen load on our own
 			gameFacade.sendNotification(GameConstants.LOAD_ASSET_QUEUE);
+		}
+
+		//==============================================================================================================
+		// DEBUG ONLY
+		//==============================================================================================================
+
+		private var totalTime:int = 0;
+		private var currentFrameTime:int = 0;
+		public function handleFrameUpdate(e:flash.events.Event):void
+		{
+			var now:int = getTimer();
+			totalTime += now - currentFrameTime;
+			currentFrameTime = getTimer();
+			if (totalTime >= 1000)
+			{
+				totalTime = 0;
+				trace((System.totalMemory * 0.000000954).toFixed(3));
+			}
 		}
 	}
 }

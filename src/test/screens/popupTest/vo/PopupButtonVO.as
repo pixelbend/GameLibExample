@@ -9,7 +9,6 @@ package test.screens.popupTest.vo
 		//==============================================================================================================
 
 		private var textID										:String;
-		private var commandName									:String;
 
 		//==============================================================================================================
 		// CONSTRUCTOR
@@ -19,7 +18,6 @@ package test.screens.popupTest.vo
 		{
 			super(x, y, width, height);
 			this.textID = textID;
-			this.commandName = commandName;
 		}
 
 		//==============================================================================================================
@@ -29,11 +27,6 @@ package test.screens.popupTest.vo
 		public function getTextID():String
 		{
 			return textID;
-		}
-
-		public function getCommandName():String
-		{
-			return commandName;
 		}
 	}
 }

@@ -1,21 +1,16 @@
 package test.screens.fileReferenceTest
 {
 	import com.pixelBender.facade.GameFacade;
-	import com.pixelBender.helpers.IRunnableHelpers;
 	import com.pixelBender.helpers.ScreenHelpers;
-	import com.pixelBender.helpers.StarlingHelpers;
 	import com.pixelBender.model.GameScreenProxy;
-	import com.pixelBender.model.vo.game.GameSizeVO;
-	import com.pixelBender.view.gameScreen.StarlingGameScreen;
 	import constants.Constants;
 	import flash.display.MovieClip;
 	import org.puremvc.as3.interfaces.INotification;
 	import starling.display.DisplayObjectContainer;
-	import starling.display.Sprite;
-	import test.screens.common.view.BackView;
-	import test.screens.common.view.TitleView;
 
-	public class FileReferenceTestScreen extends StarlingGameScreen
+	import test.screens.common.screen.TestScreenWithBackButton;
+
+	public class FileReferenceTestScreen extends TestScreenWithBackButton
 	{
 		//==============================================================================================================
 		// EMBEDDED MEMBERS
@@ -29,24 +24,9 @@ package test.screens.fileReferenceTest
 		//==============================================================================================================
 
 		/**
-		 * Starling screen graphics container
-		 */
-		protected var starlingGameScreen									:Sprite;
-
-		/**
 		 * Mediator responsible with creating the background
 		 */
 		protected var backgroundMediator									:FileReferenceBackgroundMediator;
-
-		/**
-		 * Back view
-		 */
-		protected var backView												:BackView;
-
-		/**
-		 * Welcome intro text
-		 */
-		protected var title													:TitleView;
 
 		//==============================================================================================================
 		// CONSTRUCTOR
@@ -55,7 +35,6 @@ package test.screens.fileReferenceTest
 		public function FileReferenceTestScreen(mediatorName:String)
 		{
 			super(mediatorName);
-			starlingGameScreen = new Sprite();
 		}
 
 		//==============================================================================================================
@@ -64,8 +43,8 @@ package test.screens.fileReferenceTest
 
 		override public function prepareForStart(starlingScreenContainer:DisplayObjectContainer, gameScreenProxy:GameScreenProxy):void
 		{
-			// Add screen container to display list
-			starlingScreenContainer.addChild(starlingGameScreen);
+			super.prepareForStart(starlingScreenContainer, gameScreenProxy);
+
 			// Background
 			backgroundMediator = new FileReferenceBackgroundMediator(mediatorName, starlingGameScreen);
 			facade.registerMediator(backgroundMediator);
@@ -79,38 +58,16 @@ package test.screens.fileReferenceTest
 			}
 		}
 
-		override public function start():void
-		{
-			IRunnableHelpers.start(backView);
-		}
-
-		override public function pause():void
-		{
-			IRunnableHelpers.pause(backView);
-		}
-
-		override public function resume():void
-		{
-			IRunnableHelpers.resume(backView);
-		}
-
 		override public function stop():void
 		{
-			starlingGameScreen.removeFromParent();
-			if (backgroundMediator)
+			if (backgroundMediator != null)
 			{
 				facade.removeMediator(backgroundMediator.getMediatorName());
+				backgroundMediator.dispose();
+				backgroundMediator = null;
 			}
-			IRunnableHelpers.dispose([backView, title, backgroundMediator]);
-			backgroundMediator = null;
-			backView = null;
-			title = null;
-		}
 
-		override public function dispose():void
-		{
-			StarlingHelpers.disposeContainer(starlingGameScreen);
-			starlingGameScreen = null;
+			super.stop();
 		}
 
 		//==============================================================================================================
@@ -152,19 +109,8 @@ package test.screens.fileReferenceTest
 		// LOCALS
 		//==============================================================================================================
 
-		protected function getBackNotificationName():String
-		{
-			return mediatorName + BackView.BACK_TRIGGERED;
-		}
-
 		protected function handleBackgroundCreated():void
 		{
-			// Internals
-			var gameSize:GameSizeVO = GameFacade(facade).getApplicationSize();
-			// Title
-			title = new TitleView(mediatorName, starlingGameScreen, gameSize);
-			// Back view
-			backView = new BackView(facade, mediatorName, starlingGameScreen, gameSize);
 			// Ready to start
 			sendReadyToStart();
 		}

@@ -3,27 +3,32 @@ package test.screens.common.screen
 	import com.pixelBender.helpers.IRunnableHelpers;
 	import com.pixelBender.helpers.ScreenHelpers;
 	import com.pixelBender.model.GameScreenProxy;
+	import com.pixelBender.model.vo.game.GameSizeVO;
+
 	import constants.Constants;
+
 	import org.puremvc.as3.interfaces.INotification;
+
 	import starling.display.DisplayObjectContainer;
+
 	import test.screens.common.view.BackView;
 
-	public class TestScreen extends AbstractScreen
+	public class TestScreenWithBackButton extends BaseTestScreen
 	{
 		//==============================================================================================================
 		// MEMBERS
 		//==============================================================================================================
 
 		/**
-		 * Back button
+		 * Back view
 		 */
-		protected var backView														:BackView;
+		protected var backView												:BackView;
 
 		//==============================================================================================================
 		// CONSTRUCTOR
 		//==============================================================================================================
 
-		public function TestScreen(mediatorName:String)
+		public function TestScreenWithBackButton(mediatorName:String)
 		{
 			super(mediatorName);
 		}
@@ -36,59 +41,51 @@ package test.screens.common.screen
 												 gameScreenProxy:GameScreenProxy):void
 		{
 			super.prepareForStart(starlingScreenContainer, gameScreenProxy);
-			backView = new BackView(facade, mediatorName, starlingGameScreen, gameFacade.getApplicationSize());
+
+			var gameSize:GameSizeVO = gameFacade.getApplicationSize();
+			backView = new BackView(facade, mediatorName, starlingGameScreen, gameSize);
 		}
 
 		override public function start():void
 		{
-			super.start();
-			backView.start();
+			IRunnableHelpers.start(backView);
 		}
 
 		override public function pause():void
 		{
-			super.pause();
-			backView.pause();
+			IRunnableHelpers.pause(backView);
 		}
 
 		override public function resume():void
 		{
-			super.resume();
-			backView.resume();
+			IRunnableHelpers.resume(backView);
 		}
 
 		override public function stop():void
 		{
-			IRunnableHelpers.dispose([backView]);
+			IRunnableHelpers.dispose(backView);
 			backView = null;
+
 			super.stop();
 		}
 
+		//==============================================================================================================
+		// MEDIATOR API
+		//==============================================================================================================
+
 		public override function listNotificationInterests():Array
 		{
-			return super.listNotificationInterests().concat(
-																getBackNotificationName()
-															);
+			return [ getBackNotificationName() ];
 		}
 
 		public override function handleNotification(notification:INotification):void
 		{
-			super.handleNotification(notification);
 			switch(notification.getName())
 			{
 				case getBackNotificationName():
-					handleBackTriggered();
+					ScreenHelpers.showScreen(Constants.INTRO_SCREEN_NAME, Constants.TRANSITION_SEQUENCE_NAME);
 					break;
 			}
-		}
-
-		//==============================================================================================================
-		// HANDLERS
-		//==============================================================================================================
-
-		protected function handleBackTriggered():void
-		{
-			ScreenHelpers.showScreen(Constants.INTRO_SCREEN_NAME, Constants.TRANSITION_SEQUENCE_NAME);
 		}
 
 		//==============================================================================================================

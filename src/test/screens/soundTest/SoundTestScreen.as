@@ -1,31 +1,20 @@
 package test.screens.soundTest
 {
+	import com.pixelBender.helpers.DictionaryHelpers;
 	import com.pixelBender.helpers.IRunnableHelpers;
-	import com.pixelBender.helpers.ScreenHelpers;
 	import com.pixelBender.helpers.SoundHelpers;
-	import com.pixelBender.helpers.StarlingHelpers;
 	import com.pixelBender.model.GameScreenProxy;
 	import com.pixelBender.model.vo.game.GameSizeVO;
-	import com.pixelBender.view.gameScreen.StarlingGameScreen;
-
-	import constants.Constants;
-
-	import flash.display.BitmapData;
-
-	import flash.display.MovieClip;
-	import flash.geom.Matrix;
-	import flash.system.ApplicationDomain;
 
 	import flash.utils.Dictionary;
 
-	import org.puremvc.as3.interfaces.INotification;
+	import helpers.ButtonHelpers;
 
 	import starling.display.DisplayObjectContainer;
-	import starling.display.Sprite;
 	import starling.textures.Texture;
 
-	import test.screens.common.view.BackView;
-	import test.screens.common.view.TitleView;
+	import test.screens.common.screen.TestScreenWithBackButton;
+
 	import test.screens.common.vo.TestButtonLayoutVO;
 	import test.screens.common.vo.TestButtonVO;
 	import test.screens.soundTest.view.MasterVolumeViewMediator;
@@ -35,7 +24,7 @@ package test.screens.soundTest
 	import test.screens.soundTest.vo.SoundTestSetupVO;
 	import test.screens.soundTest.vo.StopAllSoundsViewVO;
 
-	public class SoundTestScreen extends StarlingGameScreen
+	public class SoundTestScreen extends TestScreenWithBackButton
 	{
 		//==============================================================================================================
 		// EMBEDDED MEMBERS
@@ -50,21 +39,6 @@ package test.screens.soundTest
 		//==============================================================================================================
 		// MEMBERS
 		//==============================================================================================================
-
-		/**
-		 * Starling screen graphics container
-		 */
-		protected var starlingGameScreen									:Sprite;
-
-		/**
-		 * Back view
-		 */
-		protected var backView												:BackView;
-
-		/**
-		 * Welcome intro text
-		 */
-		protected var title													:TitleView;
 
 		/**
 		 * Each sound test will be handled independently by it's own mediator
@@ -93,7 +67,6 @@ package test.screens.soundTest
 		public function SoundTestScreen(mediatorName:String)
 		{
 			super(mediatorName);
-			starlingGameScreen = new Sprite();
 		}
 
 		//==============================================================================================================
@@ -103,12 +76,10 @@ package test.screens.soundTest
 		override public function prepareForStart(starlingScreenContainer:DisplayObjectContainer,
 												 gameScreenProxy:GameScreenProxy):void
 		{
-			var gameSize:GameSizeVO = gameFacade.getApplicationSize();
+			super.prepareForStart(starlingScreenContainer, gameScreenProxy);
 
+			var gameSize:GameSizeVO = gameFacade.getApplicationSize();
 			registerDefaultPackageSounds();
-			starlingScreenContainer.addChild(starlingGameScreen);
-			title = new TitleView(mediatorName, starlingGameScreen, gameSize);
-			backView = new BackView(facade, mediatorName, starlingGameScreen, gameSize);
 			createTweenTestViews(gameScreenProxy as SoundTestProxy, gameSize);
 			createStopAllSoundsMediator(gameScreenProxy as SoundTestProxy, gameSize);
 			createMasterVolumeMediator(gameScreenProxy as SoundTestProxy, gameSize);
@@ -121,7 +92,7 @@ package test.screens.soundTest
 			IRunnableHelpers.start(testViews);
 			IRunnableHelpers.start(stopAllSoundsMediator);
 			IRunnableHelpers.start(masterVolumeMediator);
-			IRunnableHelpers.start(backView);
+			super.start();
 		}
 
 		override public function pause():void
@@ -129,7 +100,7 @@ package test.screens.soundTest
 			IRunnableHelpers.pause(testViews);
 			IRunnableHelpers.pause(stopAllSoundsMediator);
 			IRunnableHelpers.pause(masterVolumeMediator);
-			IRunnableHelpers.pause(backView);
+			super.pause();
 		}
 
 		override public function resume():void
@@ -137,7 +108,7 @@ package test.screens.soundTest
 			IRunnableHelpers.resume(testViews);
 			IRunnableHelpers.resume(stopAllSoundsMediator);
 			IRunnableHelpers.resume(masterVolumeMediator);
-			IRunnableHelpers.resume(backView);
+			super.resume();
 		}
 
 		override public function stop():void
@@ -169,35 +140,29 @@ package test.screens.soundTest
 				masterVolumeMediator = null;
 			}
 
-			starlingGameScreen.removeFromParent();
-			IRunnableHelpers.dispose([backView, title]);
-
 			unregisterDefaultPackageSounds();
+
+			super.stop();
 		}
 
-		override public function dispose():void
+		public override function dispose():void
 		{
-			StarlingHelpers.disposeContainer(starlingGameScreen);
-			starlingGameScreen = null;
-		}
-
-		//==============================================================================================================
-		// MEDIATOR API
-		//==============================================================================================================
-
-		public override function listNotificationInterests():Array
-		{
-			return [ getBackNotificationName() ];
-		}
-
-		public override function handleNotification(notification:INotification):void
-		{
-			switch(notification.getName())
+			if (buttonTextures != null)
 			{
-				case getBackNotificationName():
-					ScreenHelpers.showScreen(Constants.INTRO_SCREEN_NAME, Constants.TRANSITION_SEQUENCE_NAME);
-					break;
+				for each (var buttonTexturePair:Vector.<Texture> in buttonTextures)
+				{
+					for (var i:int = 0; i<buttonTexturePair.length; i++)
+					{
+						if (buttonTexturePair[i] == null) continue;
+						buttonTexturePair[i].dispose();
+						buttonTexturePair[i] = null;
+					}
+				}
+				DictionaryHelpers.deleteValues(buttonTextures);
+				buttonTextures = null;
 			}
+
+			super.dispose();
 		}
 
 		//==============================================================================================================
@@ -214,11 +179,6 @@ package test.screens.soundTest
 		//==============================================================================================================
 		// LOCALS
 		//==============================================================================================================
-
-		protected function getBackNotificationName():String
-		{
-			return mediatorName + BackView.BACK_TRIGGERED;
-		}
 
 		private function createTweenTestViews(proxy:SoundTestProxy, gameSize:GameSizeVO):void
 		{
@@ -246,7 +206,10 @@ package test.screens.soundTest
 				buttonHeight:Number = gameSize.getHeight() * stopSoundsViewVO.getButtonHeight(),
 				buttonSize:Number = Math.min(buttonWidth, buttonHeight);
 
-			buttonTextures[stopSoundsViewVO.getButtonLinkage()] = getButtonTextures(2, stopSoundsViewVO.getButtonLinkage(), buttonSize);
+			if (buttonTextures[stopSoundsViewVO.getButtonLinkage()] == null)
+			{
+				buttonTextures[stopSoundsViewVO.getButtonLinkage()] = ButtonHelpers.getSquareButtonTextures(stopSoundsViewVO.getButtonLinkage(), 2, buttonSize);
+			}
 
 			stopAllSoundsMediator = new StopAllSoundsViewMediator(mediatorName, starlingGameScreen, gameSize, stopSoundsViewVO, buttonTextures);
 			facade.registerMediator(stopAllSoundsMediator);
@@ -271,33 +234,8 @@ package test.screens.soundTest
 			buttonTextures = new Dictionary();
 			for (var i:int=0; i<buttonVOs.length; i++)
 			{
-				buttonTextures[buttonVOs[i].getButtonID()] = getButtonTextures(2, buttonVOs[i].getLinkage(), buttonSize);
+				buttonTextures[buttonVOs[i].getButtonID()] = ButtonHelpers.getSquareButtonTextures(buttonVOs[i].getLinkage(), 2, buttonSize);
 			}
-		}
-
-		protected static function getButtonTextures(numberOfFrames:int, buttonGraphicsLinkage:String, buttonSize:int):Vector.<Texture>
-		{
-			var buttonClass:Class,
-					buttonGraphics:MovieClip,
-					bitmapData:BitmapData,
-					matrix:Matrix = new Matrix(),
-					buttonTextures:Vector.<Texture>;
-
-			buttonClass = ApplicationDomain.currentDomain.getDefinition(buttonGraphicsLinkage) as Class;
-			buttonGraphics = new buttonClass();
-			buttonTextures = new Vector.<Texture>(numberOfFrames, true);
-
-			for (var i:int=0; i<buttonTextures.length; i++)
-			{
-				matrix.identity();
-				buttonGraphics.gotoAndStop(i+1);
-				matrix.scale(buttonSize/buttonGraphics.width, buttonSize/buttonGraphics.height);
-				bitmapData = new BitmapData(buttonSize, buttonSize, true, 0x00000000);
-				bitmapData.draw(buttonGraphics, matrix, null, null, null, true);
-				buttonTextures[i] = Texture.fromBitmapData(bitmapData, false);
-			}
-
-			return buttonTextures;
 		}
 	}
 }

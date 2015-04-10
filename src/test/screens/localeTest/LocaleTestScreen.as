@@ -1,6 +1,6 @@
 package test.screens.localeTest
 {
-	import com.pixelBender.constants.GameConstants;
+	import com.pixelBender.helpers.IRunnableHelpers;
 	import com.pixelBender.helpers.LocalizationHelpers;
 	import com.pixelBender.helpers.ScreenHelpers;
 	import com.pixelBender.helpers.StarlingHelpers;
@@ -8,13 +8,21 @@ package test.screens.localeTest
 	import com.pixelBender.model.vo.game.GameSizeVO;
 	import constants.Constants;
 	import flash.display.Bitmap;
+
+	import helpers.ButtonHelpers;
+
+	import org.puremvc.as3.interfaces.INotification;
+
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Image;
 	import starling.text.TextField;
-	import test.screens.common.screen.TestScreen;
+	import starling.textures.Texture;
+
+	import test.screens.common.screen.TestScreenWithBackButton;
+	import test.screens.common.view.ButtonView;
 	import test.screens.localeTest.vo.LocaleTestButtonVO;
 
-	public class LocaleTestScreen extends TestScreen
+	public class LocaleTestScreen extends TestScreenWithBackButton
 	{
 		//==============================================================================================================
 		// CONSTANTS
@@ -39,6 +47,7 @@ package test.screens.localeTest
 		// MEMBERS
 		//==============================================================================================================
 
+		private var changeLanguageButton							:ButtonView;
 		private var currentLanguageText								:TextField;
 		private var languageImage									:Image;
 		private var languageIndex									:int;
@@ -64,12 +73,33 @@ package test.screens.localeTest
 			// Create locals
 			createText();
 			createImage(gameScreenProxy);
+			createButton(gameScreenProxy as LocaleTestProxy, gameFacade.getApplicationSize());
 			// Send ready
 			sendReadyToStart();
 		}
 
+		public override function start():void
+		{
+			IRunnableHelpers.start(changeLanguageButton);
+			super.start();
+		}
+
+		public override function pause():void
+		{
+			IRunnableHelpers.pause(changeLanguageButton);
+			super.pause();
+		}
+
+		public override function resume():void
+		{
+			IRunnableHelpers.resume(changeLanguageButton);
+			super.pause();
+		}
+
 		public override function stop():void
 		{
+			IRunnableHelpers.dispose(changeLanguageButton);
+			changeLanguageButton = null;
 			StarlingHelpers.removeFromParent(currentLanguageText);
 			currentLanguageText = null;
 			StarlingHelpers.removeFromParent(languageImage);
@@ -92,16 +122,27 @@ package test.screens.localeTest
 		// NOTIFICATION/CALLBACK HANDLERS
 		//==============================================================================================================
 
-		protected override function handleTestButtonTriggered(testButtonData:Object):void
+		public override function listNotificationInterests():Array
 		{
-			var data:LocaleTestButtonVO = testButtonData as LocaleTestButtonVO;
-			switch(data.getCommandName())
+			return [ getBackNotificationName(), mediatorName + ButtonView.BUTTON_TRIGGERED ];
+		}
+
+		public override function handleNotification(notification:INotification):void
+		{
+			switch(notification.getName())
 			{
-				case GameConstants.CHANGE_APPLICATION_LOCALE:
+				case getBackNotificationName():
+					ScreenHelpers.showScreen(Constants.INTRO_SCREEN_NAME, Constants.TRANSITION_SEQUENCE_NAME);
+					break;
+				case mediatorName + ButtonView.BUTTON_TRIGGERED:
 					handleChangeLanguage();
 					break;
 			}
 		}
+
+		//==============================================================================================================
+		// LOCALS
+		//==============================================================================================================
 
 		private function handleChangeLanguage():void
 		{
@@ -109,10 +150,6 @@ package test.screens.localeTest
 			LocalizationHelpers.changeLocale(LANGUAGES[languageIndex % LANGUAGES.length]);
 			ScreenHelpers.showScreen(mediatorName, Constants.TRANSITION_SEQUENCE_NAME);
 		}
-
-		//==============================================================================================================
-		// LOCALS
-		//==============================================================================================================
 
 		private function createText():void
 		{
@@ -142,6 +179,20 @@ package test.screens.localeTest
 			languageImage.scaleX = (gameSize.getWidth() * 0.33) / languageImage.width;
 			languageImage.scaleY = (gameSize.getHeight()* 0.33) / languageImage.height;
 			starlingGameScreen.addChild(languageImage);
+		}
+		private function createButton(proxy:LocaleTestProxy, gameSize:GameSizeVO):void
+		{
+			var buttonVO:LocaleTestButtonVO = proxy.getButtonVO(),
+				buttonX:int = gameSize.getWidth() * buttonVO.getX(),
+				buttonY:int = gameSize.getHeight() * buttonVO.getY(),
+				buttonWidth:int = gameSize.getWidth() * buttonVO.getWidth(),
+				buttonHeight:int = gameSize.getHeight() * buttonVO.getHeight(),
+				buttonTextures:Vector.<Texture> = ButtonHelpers.getButtonTextures("buttonLinkage", 2, buttonWidth, buttonHeight),
+				buttonText:String = LocalizationHelpers.getLocalizedText(mediatorName, buttonVO.getTextID()),
+				buttonFontSize:int = buttonHeight * 0.2;
+
+			changeLanguageButton = new ButtonView(mediatorName, null);
+			changeLanguageButton.createButton(starlingGameScreen, buttonTextures[0], buttonTextures[1], buttonText, null, buttonX, buttonY, buttonFontSize, 0xFFFFFF)
 		}
 	}
 }

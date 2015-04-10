@@ -5,32 +5,22 @@ package test.screens.popupTest
 	import com.pixelBender.helpers.LocalizationHelpers;
 	import com.pixelBender.helpers.PopupHelpers;
 	import com.pixelBender.helpers.ScreenHelpers;
-	import com.pixelBender.helpers.StarlingHelpers;
 	import com.pixelBender.model.GameScreenProxy;
 	import com.pixelBender.model.vo.game.GameSizeVO;
 	import com.pixelBender.model.vo.popup.PopupTranslucentLayerVO;
-	import com.pixelBender.view.gameScreen.StarlingGameScreen;
 
 	import constants.Constants;
 
-	import flash.display.BitmapData;
-
-	import flash.display.MovieClip;
-
-	import flash.geom.Matrix;
-	import flash.geom.Rectangle;
-	import flash.profiler.profile;
-	import flash.system.ApplicationDomain;
+	import helpers.ButtonHelpers;
 
 	import org.puremvc.as3.interfaces.INotification;
 
 	import starling.display.DisplayObjectContainer;
-	import starling.display.Sprite;
 	import starling.textures.Texture;
 
-	import test.screens.common.view.BackView;
+	import test.screens.common.screen.TestScreenWithBackButton;
+
 	import test.screens.common.view.ButtonView;
-	import test.screens.common.view.TitleView;
 	import test.screens.popupTest.command.ChangeCustomizationStateCommand;
 	import test.screens.popupTest.view.AlphaSwitchCustomizeView;
 	import test.screens.popupTest.view.CheckBoxCustomizeView;
@@ -41,7 +31,7 @@ package test.screens.popupTest
 	import test.screens.popupTest.vo.PopupButtonVO;
 	import test.screens.popupTest.vo.PopupCustomizeViewVO;
 
-	public class PopupTestScreen extends StarlingGameScreen
+	public class PopupTestScreen extends TestScreenWithBackButton
 	{
 		//==============================================================================================================
 		// CONSTANTS
@@ -57,26 +47,11 @@ package test.screens.popupTest
 		//==============================================================================================================
 
 		[Embed(source="../../../assets/generic/screens/popupTest/settings/logic.xml")]
-		private const logicXML														:Class;
+		private const logicXML												:Class;
 
 		//==============================================================================================================
 		// MEMBERS
 		//==============================================================================================================
-
-		/**
-		 * Starling screen graphics container
-		 */
-		protected var starlingGameScreen									:Sprite;
-
-		/**
-		 * Back view
-		 */
-		protected var backView												:BackView;
-
-		/**
-		 * Welcome intro text
-		 */
-		protected var title													:TitleView;
 
 		/**
 		 * All the customized views
@@ -100,7 +75,6 @@ package test.screens.popupTest
 		public function PopupTestScreen(mediatorName:String)
 		{
 			super(mediatorName);
-			starlingGameScreen = new Sprite();
 		}
 
 		//==============================================================================================================
@@ -110,13 +84,11 @@ package test.screens.popupTest
 		override public function prepareForStart(starlingScreenContainer:DisplayObjectContainer,
 												 gameScreenProxy:GameScreenProxy):void
 		{
+			super.prepareForStart(starlingScreenContainer, gameScreenProxy);
+
 			var popupScreenProxy:PopupTestProxy = gameScreenProxy as PopupTestProxy,
 				gameSize:GameSizeVO = gameFacade.getApplicationSize();
 
-			starlingScreenContainer.addChild(starlingGameScreen);
-
-			title = new TitleView(mediatorName, starlingGameScreen, gameSize);
-			backView = new BackView(facade, mediatorName, starlingGameScreen, gameSize);
 			createCustomizeViews(popupScreenProxy, gameSize);
 			createButton(popupScreenProxy, gameSize);
 
@@ -125,42 +97,34 @@ package test.screens.popupTest
 
 		public override function start():void
 		{
-			IRunnableHelpers.start(backView);
 			IRunnableHelpers.start(customizeViews);
 			IRunnableHelpers.start(openPopupButton);
+			super.start();
 		}
 
 		public override function pause():void
 		{
-			IRunnableHelpers.pause(backView);
 			IRunnableHelpers.pause(customizeViews);
 			IRunnableHelpers.pause(openPopupButton);
+			super.pause();
 		}
 
 		public override function resume():void
 		{
-			IRunnableHelpers.resume(backView);
 			IRunnableHelpers.resume(customizeViews);
 			IRunnableHelpers.resume(openPopupButton);
+			super.resume();
 		}
 
 		public override function stop():void
 		{
-			starlingGameScreen.removeFromParent();
-			IRunnableHelpers.dispose([backView, title, openPopupButton]);
+			IRunnableHelpers.dispose(openPopupButton);
 			IRunnableHelpers.dispose(customizeViews);
 			IDisposeHelpers.dispose(resultView);
 			openPopupButton = null;
 			customizeViews = null;
 			resultView = null;
-			backView = null;
-			title = null;
-		}
-
-		override public function dispose():void
-		{
-			StarlingHelpers.disposeContainer(starlingGameScreen);
-			starlingGameScreen = null;
+			super.stop();
 		}
 
 		//==============================================================================================================
@@ -240,17 +204,12 @@ package test.screens.popupTest
 			resultView.update(translucentPropertiesVO);
 		}
 
-		protected function getBackNotificationName():String
-		{
-			return mediatorName + BackView.BACK_TRIGGERED;
-		}
-
 		private function createCustomizeViews(proxy:PopupTestProxy, gameSize:GameSizeVO):void
 		{
 			proxy.initializeState();
 
 			var size:int = gameSize.getHeight() * 0.1,
-				checkBoxTextures:Vector.<Texture> = getGraphicsTextures("checkBoxLinkage", 2, size, size),
+				checkBoxTextures:Vector.<Texture> = ButtonHelpers.getSquareButtonTextures("checkBoxLinkage", 2, size),
 				customizationVO:CustomizationStateVO = proxy.getCustomizationStateVO(),
 				viewVOs:Vector.<PopupCustomizeViewVO> = proxy.getCustomizeVOs(),
 				view:PopupCustomizeView;
@@ -285,37 +244,12 @@ package test.screens.popupTest
 				buttonY:int = gameSize.getHeight() * buttonVO.getY(),
 				buttonWidth:int = gameSize.getWidth() * buttonVO.getWidth(),
 				buttonHeight:int = gameSize.getHeight() * buttonVO.getHeight(),
-				buttonTextures:Vector.<Texture> = getGraphicsTextures("buttonLinkage", 2, buttonWidth, buttonHeight),
+				buttonTextures:Vector.<Texture> = ButtonHelpers.getButtonTextures("buttonLinkage", 2, buttonWidth, buttonHeight),
 				buttonText:String = LocalizationHelpers.getLocalizedText(mediatorName, buttonVO.getTextID()),
 				buttonFontSize:int = buttonHeight * 0.2;
 
 			openPopupButton = new ButtonView(mediatorName, null);
 			openPopupButton.createButton(starlingGameScreen, buttonTextures[0], buttonTextures[1], buttonText, null, buttonX, buttonY, buttonFontSize, 0xFFFFFF)
-		}
-
-		protected static function getGraphicsTextures(linkage:String, numberOfFrames:int, width:int, height:int):Vector.<Texture>
-		{
-			var buttonClass:Class,
-				buttonGraphics:MovieClip,
-				bitmapData:BitmapData,
-				matrix:Matrix = new Matrix(),
-				buttonTextures:Vector.<Texture>;
-
-			buttonClass = ApplicationDomain.currentDomain.getDefinition(linkage) as Class;
-			buttonGraphics = new buttonClass();
-			buttonTextures = new Vector.<Texture>(numberOfFrames, true);
-
-			for (var i:int=0; i<buttonTextures.length; i++)
-			{
-				matrix.identity();
-				buttonGraphics.gotoAndStop(i+1);
-				matrix.scale(width/buttonGraphics.width, height/buttonGraphics.height);
-				bitmapData = new BitmapData(width, height, true, 0x00000000);
-				bitmapData.draw(buttonGraphics, matrix, null, null, null, true);
-				buttonTextures[i] = Texture.fromBitmapData(bitmapData, false);
-			}
-
-			return buttonTextures;
 		}
 	}
 }

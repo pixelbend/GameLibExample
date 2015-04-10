@@ -1,26 +1,23 @@
 package test.screens.localeTest.vo
 {
-	import constants.Constants;
+	import test.screens.common.vo.ViewVO;
 
-	import test.screens.common.vo.IButtonDataVO;
-
-	public class LocaleTestButtonVO implements IButtonDataVO
+	public class LocaleTestButtonVO extends ViewVO
 	{
 		//==============================================================================================================
 		// MEMBERS
 		//==============================================================================================================
 
 		private var textID												:String;
-		private var commandName											:String;
 
 		//==============================================================================================================
 		// CONSTRUCTOR
 		//==============================================================================================================
 
-		public function LocaleTestButtonVO(textID:String, commandName:String)
+		public function LocaleTestButtonVO(x:Number, y:Number, width:Number, height:Number, textID:String, commandName:String)
 		{
+			super(x, y, width, height);
 			this.textID = textID;
-			this.commandName = commandName;
 		}
 
 		//==============================================================================================================
@@ -30,16 +27,6 @@ package test.screens.localeTest.vo
 		public function getTextID():String
 		{
 			return textID;
-		}
-
-		public function getCommandName():String
-		{
-			return commandName;
-		}
-
-		public function getButtonGraphics():String
-		{
-			return Constants.SIMPLE_BUTTON_GRAPHICS;
 		}
 	}
 }

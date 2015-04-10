@@ -1,6 +1,5 @@
 package test.globalView
 {
-	import com.pixelBender.facade.GameFacade;
 	import com.pixelBender.helpers.StarlingHelpers;
 	import com.pixelBender.interfaces.IDispose;
 	import com.pixelBender.model.vo.game.GameSizeVO;
@@ -59,10 +58,26 @@ package test.globalView
 		{
 			StarlingHelpers.disposeContainer(container);
 			container = null;
-			background = null;
-			pauseButton = null;
-			resumeButton = null;
-			disposeButton = null;
+			if (background != null)
+			{
+				background.removeFromParent(true);
+				background = null;
+			}
+			if (pauseButton != null)
+			{
+				pauseButton.removeFromParent(true);
+				pauseButton = null;
+			}
+			if (resumeButton != null)
+			{
+				resumeButton.removeFromParent(true);
+				resumeButton = null;
+			}
+			if (disposeButton != null)
+			{
+				disposeButton.removeFromParent(true);
+				disposeButton = null;
+			}
 		}
 
 		//==============================================================================================================

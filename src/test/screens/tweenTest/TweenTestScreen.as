@@ -6,14 +6,14 @@ package test.screens.tweenTest
 	import com.pixelBender.helpers.StarlingHelpers;
 	import com.pixelBender.model.GameScreenProxy;
 	import com.pixelBender.model.vo.game.GameSizeVO;
-	import com.pixelBender.view.gameScreen.StarlingGameScreen;
 
 	import constants.Constants;
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;
 	import flash.geom.Matrix;
-	import flash.system.ApplicationDomain;
 	import flash.utils.Dictionary;
+
+	import helpers.ButtonHelpers;
 
 	import org.puremvc.as3.interfaces.INotification;
 
@@ -21,14 +21,14 @@ package test.screens.tweenTest
 	import starling.display.Sprite;
 	import starling.textures.Texture;
 
-	import test.screens.common.view.BackView;
-	import test.screens.common.view.TitleView;
+	import test.screens.common.screen.TestScreenWithBackButton;
+
 	import test.screens.tweenTest.view.TweenTestViewMediator;
 	import test.screens.common.vo.TestButtonLayoutVO;
 	import test.screens.common.vo.TestButtonVO;
 	import test.screens.tweenTest.vo.TweenTestSetupVO;
 
-	public class TweenTestScreen extends StarlingGameScreen
+	public class TweenTestScreen extends TestScreenWithBackButton
 	{
 		//==============================================================================================================
 		// EMBEDDED MEMBERS
@@ -43,21 +43,6 @@ package test.screens.tweenTest
 		//==============================================================================================================
 		// MEMBERS
 		//==============================================================================================================
-
-		/**
-		 * Starling screen graphics container
-		 */
-		protected var starlingGameScreen									:Sprite;
-
-		/**
-		 * Back view
-		 */
-		protected var backView												:BackView;
-
-		/**
-		 * Welcome intro text
-		 */
-		protected var title													:TitleView;
 
 		/**
 		 * Each tween test will be handled independently by it's own mediator
@@ -88,16 +73,16 @@ package test.screens.tweenTest
 		// PUBLIC OVERRIDES
 		//==============================================================================================================
 
-		public override function prepareForStart(starlingScreenContainer:DisplayObjectContainer, gameScreenProxy:GameScreenProxy):void
+		public override function prepareForStart(starlingScreenContainer:DisplayObjectContainer,
+												 	gameScreenProxy:GameScreenProxy):void
 		{
+			super.prepareForStart(starlingScreenContainer, gameScreenProxy);
+
 			var tweenGraphics:MovieClip = gameScreenProxy.getScreenAssetPackage().getSWFAsset("tweenGraphics").getMovieSwf(),
 				gameSize:GameSizeVO = gameFacade.getApplicationSize(),
 				tweenTestProxy:TweenTestProxy = gameScreenProxy as TweenTestProxy;
 
-			starlingScreenContainer.addChild(starlingGameScreen);
 			createTweenTarget(tweenGraphics.tweenTarget, gameSize);
-			title = new TitleView(mediatorName, starlingGameScreen, gameSize);
-			backView = new BackView(facade, mediatorName, starlingGameScreen, gameSize);
 			createTweenTestViews(tweenTestProxy, gameSize);
 
 			sendReadyToStart();
@@ -106,28 +91,26 @@ package test.screens.tweenTest
 		public override function start():void
 		{
 			IRunnableHelpers.start(tweenTestViews);
-			IRunnableHelpers.start(backView);
+			super.start();
 		}
 
 		public override function pause():void
 		{
 			IRunnableHelpers.pause(tweenTestViews);
-			IRunnableHelpers.pause(backView);
+			super.pause();
 		}
 
 		public override function resume():void
 		{
 			IRunnableHelpers.resume(tweenTestViews);
-			IRunnableHelpers.resume(backView);
+			super.resume();
 		}
 
 		public override function stop():void
 		{
-			var i:int;
-
 			if (tweenTestViews != null)
 			{
-				for (i=0; i<tweenTestViews.length; i++)
+				for (var i:int=0; i<tweenTestViews.length; i++)
 				{
 					if (tweenTestViews[i] == null) continue;
 					facade.removeMediator(tweenTestViews[i].getMediatorName());
@@ -139,29 +122,27 @@ package test.screens.tweenTest
 			StarlingHelpers.removeFromParent(tweenTarget);
 			tweenTarget = null;
 
-			starlingGameScreen.removeFromParent();
-			IRunnableHelpers.dispose([backView, title]);
+			super.stop();
 		}
 
 		override public function dispose():void
 		{
-			StarlingHelpers.disposeContainer(starlingGameScreen);
-			starlingGameScreen = null;
-
 			if (buttonTextures != null)
 			{
-				for each (var buttonTextureTriplet:Vector.<Texture> in buttonTextures)
+				for each (var buttonTexturePair:Vector.<Texture> in buttonTextures)
 				{
-					for (var i:int = 0; i<buttonTextureTriplet.length; i++)
+					for (var i:int = 0; i<buttonTexturePair.length; i++)
 					{
-						if (buttonTextureTriplet[i] == null) continue;
-						buttonTextureTriplet[i].dispose();
-						buttonTextureTriplet[i] = null;
+						if (buttonTexturePair[i] == null) continue;
+						buttonTexturePair[i].dispose();
+						buttonTexturePair[i] = null;
 					}
 				}
 				DictionaryHelpers.deleteValues(buttonTextures);
 				buttonTextures = null;
 			}
+
+			super.dispose();
 		}
 
 		//==============================================================================================================
@@ -197,11 +178,6 @@ package test.screens.tweenTest
 		//==============================================================================================================
 		// LOCALS
 		//==============================================================================================================
-
-		protected function getBackNotificationName():String
-		{
-			return mediatorName + BackView.BACK_TRIGGERED;
-		}
 
 		private function createTweenTestViews(proxy:TweenTestProxy, gameSize:GameSizeVO):void
 		{
@@ -257,32 +233,8 @@ package test.screens.tweenTest
 			buttonTextures = new Dictionary();
 			for (var i:int=0; i<buttonVOs.length; i++)
 			{
-				buttonTextures[buttonVOs[i].getButtonID()] = getButtonTextures(2, buttonVOs[i].getLinkage(), buttonSize);
+				buttonTextures[buttonVOs[i].getButtonID()] = ButtonHelpers.getSquareButtonTextures(buttonVOs[i].getLinkage(), 2, buttonSize);
 			}
-		}
-
-		protected static function getButtonTextures(numberOfFrames:int, buttonGraphicsLinkage:String, buttonSize:int):Vector.<Texture>
-		{
-			var buttonClass:Class,
-				buttonGraphics:MovieClip,
-				bitmapData:BitmapData,
-				matrix:Matrix = new Matrix(),
-				buttonTextures:Vector.<Texture>;
-
-			buttonClass = ApplicationDomain.currentDomain.getDefinition(buttonGraphicsLinkage) as Class;
-			buttonGraphics = new buttonClass();
-			buttonTextures = new Vector.<Texture>(numberOfFrames, true);
-
-			for (var i:int=0; i<buttonTextures.length; i++)
-			{
-				buttonGraphics.gotoAndStop(i+1);
-				matrix.scale(buttonSize/buttonGraphics.width, buttonSize/buttonGraphics.height);
-				bitmapData = new BitmapData(buttonSize, buttonSize, true, 0x00000000);
-				bitmapData.draw(buttonGraphics, matrix, null, null, null, true);
-				buttonTextures[i] = Texture.fromBitmapData(bitmapData, false);
-			}
-
-			return buttonTextures;
 		}
 	}
 }

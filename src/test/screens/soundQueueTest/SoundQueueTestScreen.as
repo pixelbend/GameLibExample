@@ -1,37 +1,22 @@
 package test.screens.soundQueueTest
 {
+	import com.pixelBender.helpers.DictionaryHelpers;
 	import com.pixelBender.helpers.IRunnableHelpers;
-	import com.pixelBender.helpers.ScreenHelpers;
-	import com.pixelBender.helpers.StarlingHelpers;
+	import com.pixelBender.helpers.SoundHelpers;
 	import com.pixelBender.model.GameScreenProxy;
 	import com.pixelBender.model.vo.game.GameSizeVO;
-	import com.pixelBender.view.gameScreen.StarlingGameScreen;
-
-	import constants.Constants;
-
-	import flash.display.BitmapData;
-	import flash.display.MovieClip;
-	import flash.geom.Matrix;
-	import flash.geom.Rectangle;
-	import flash.system.ApplicationDomain;
 	import flash.utils.Dictionary;
-
-	import org.puremvc.as3.interfaces.INotification;
-
+	import helpers.ButtonHelpers;
 	import starling.display.DisplayObjectContainer;
-	import starling.display.Sprite;
 	import starling.textures.Texture;
 
-	import test.screens.common.utils.ScaleBitmap;
-
-	import test.screens.common.view.BackView;
-	import test.screens.common.view.TitleView;
+	import test.screens.common.screen.TestScreenWithBackButton;
 	import test.screens.common.vo.TestButtonLayoutVO;
 	import test.screens.common.vo.TestButtonVO;
 	import test.screens.soundQueueTest.view.SoundQueueTestViewMediator;
 	import test.screens.soundQueueTest.vo.SoundQueueTestSetupVO;
 
-	public class SoundQueueTestScreen extends StarlingGameScreen
+	public class SoundQueueTestScreen extends TestScreenWithBackButton
 	{
 		//==============================================================================================================
 		// EMBEDDED MEMBERS
@@ -46,21 +31,6 @@ package test.screens.soundQueueTest
 		//==============================================================================================================
 		// MEMBERS
 		//==============================================================================================================
-
-		/**
-		 * Starling screen graphics container
-		 */
-		protected var starlingGameScreen									:Sprite;
-
-		/**
-		 * Back view
-		 */
-		protected var backView												:BackView;
-
-		/**
-		 * Welcome intro text
-		 */
-		protected var title													:TitleView;
 
 		/**
 		 * Each sound queue test will be handled independently by it's own mediator
@@ -79,7 +49,6 @@ package test.screens.soundQueueTest
 		public function SoundQueueTestScreen(mediatorName:String)
 		{
 			super(mediatorName);
-			starlingGameScreen = new Sprite();
 		}
 
 		//==============================================================================================================
@@ -89,12 +58,10 @@ package test.screens.soundQueueTest
 		override public function prepareForStart(starlingScreenContainer:DisplayObjectContainer,
 												 gameScreenProxy:GameScreenProxy):void
 		{
-			var gameSize:GameSizeVO = gameFacade.getApplicationSize();
+			super.prepareForStart(starlingScreenContainer, gameScreenProxy);
 
+			var gameSize:GameSizeVO = gameFacade.getApplicationSize();
 			registerDefaultPackageSounds();
-			starlingScreenContainer.addChild(starlingGameScreen);
-			title = new TitleView(mediatorName, starlingGameScreen, gameSize);
-			backView = new BackView(facade, mediatorName, starlingGameScreen, gameSize);
 			createTweenTestViews(gameScreenProxy as SoundQueueTestProxy, gameSize);
 
 			sendReadyToStart();
@@ -103,28 +70,28 @@ package test.screens.soundQueueTest
 		override public function start():void
 		{
 			IRunnableHelpers.start(testViews);
-			IRunnableHelpers.start(backView);
+			super.start();
 		}
 
 		override public function pause():void
 		{
 			IRunnableHelpers.pause(testViews);
-			IRunnableHelpers.pause(backView);
+			super.pause();
 		}
 
 		override public function resume():void
 		{
 			IRunnableHelpers.resume(testViews);
-			IRunnableHelpers.resume(backView);
+			super.resume();
 		}
 
 		override public function stop():void
 		{
-			var i:int;
+			SoundHelpers.stopAllSoundsOnChannels();
 
 			if (testViews != null)
 			{
-				for (i=0; i<testViews.length; i++)
+				for (var i:int=0; i<testViews.length; i++)
 				{
 					if (testViews[i] == null) continue;
 					facade.removeMediator(testViews[i].getMediatorName());
@@ -133,35 +100,29 @@ package test.screens.soundQueueTest
 				testViews = null;
 			}
 
-			starlingGameScreen.removeFromParent();
-			IRunnableHelpers.dispose([backView, title]);
-
 			unregisterDefaultPackageSounds();
+
+			super.stop();
 		}
 
-		override public function dispose():void
+		public override function dispose():void
 		{
-			StarlingHelpers.disposeContainer(starlingGameScreen);
-			starlingGameScreen = null;
-		}
-
-		//==============================================================================================================
-		// MEDIATOR API
-		//==============================================================================================================
-
-		public override function listNotificationInterests():Array
-		{
-			return [ getBackNotificationName() ];
-		}
-
-		public override function handleNotification(notification:INotification):void
-		{
-			switch(notification.getName())
+			if (buttonTextures != null)
 			{
-				case getBackNotificationName():
-					ScreenHelpers.showScreen(Constants.INTRO_SCREEN_NAME, Constants.TRANSITION_SEQUENCE_NAME);
-					break;
+				for each (var buttonTexturePair:Vector.<Texture> in buttonTextures)
+				{
+					for (var i:int = 0; i<buttonTexturePair.length; i++)
+					{
+						if (buttonTexturePair[i] == null) continue;
+						buttonTexturePair[i].dispose();
+						buttonTexturePair[i] = null;
+					}
+				}
+				DictionaryHelpers.deleteValues(buttonTextures);
+				buttonTextures = null;
 			}
+
+			super.dispose();
 		}
 
 		//==============================================================================================================
@@ -179,11 +140,6 @@ package test.screens.soundQueueTest
 		// LOCALS
 		//==============================================================================================================
 
-		protected function getBackNotificationName():String
-		{
-			return mediatorName + BackView.BACK_TRIGGERED;
-		}
-
 		protected function createTextureMap(gameSize:GameSizeVO, buttonLayout:TestButtonLayoutVO):void
 		{
 			if (buttonTextures != null) return;
@@ -196,33 +152,8 @@ package test.screens.soundQueueTest
 			buttonTextures = new Dictionary();
 			for (var i:int=0; i<buttonVOs.length; i++)
 			{
-				buttonTextures[buttonVOs[i].getButtonID()] = getButtonTextures(2, buttonVOs[i].getLinkage(), buttonSize);
+				buttonTextures[buttonVOs[i].getButtonID()] = ButtonHelpers.getSquareButtonTextures(buttonVOs[i].getLinkage(), 2, buttonSize);
 			}
-		}
-
-		protected static function getButtonTextures(numberOfFrames:int, buttonGraphicsLinkage:String, buttonSize:int):Vector.<Texture>
-		{
-			var buttonClass:Class,
-				buttonGraphics:MovieClip,
-				bitmapData:BitmapData,
-				matrix:Matrix = new Matrix(),
-				buttonTextures:Vector.<Texture>;
-
-			buttonClass = ApplicationDomain.currentDomain.getDefinition(buttonGraphicsLinkage) as Class;
-			buttonGraphics = new buttonClass();
-			buttonTextures = new Vector.<Texture>(numberOfFrames, true);
-
-			for (var i:int=0; i<buttonTextures.length; i++)
-			{
-				matrix.identity();
-				buttonGraphics.gotoAndStop(i+1);
-				matrix.scale(buttonSize/buttonGraphics.width, buttonSize/buttonGraphics.height);
-				bitmapData = new BitmapData(buttonSize, buttonSize, true, 0x00000000);
-				bitmapData.draw(buttonGraphics, matrix, null, null, null, true);
-				buttonTextures[i] = Texture.fromBitmapData(bitmapData, false);
-			}
-
-			return buttonTextures;
 		}
 
 		private function createTweenTestViews(proxy:SoundQueueTestProxy, gameSize:GameSizeVO):void

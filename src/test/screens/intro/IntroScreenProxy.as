@@ -1,11 +1,20 @@
 package test.screens.intro
 {
-	import test.screens.common.model.AbstractScreenProxy;
+	import com.pixelBender.model.GameScreenProxy;
+
+	import test.screens.common.vo.ButtonLayoutVO;
 	import test.screens.common.vo.IButtonDataVO;
 	import test.screens.intro.vo.IntroButtonDataVO;
 
-	public class IntroScreenProxy extends AbstractScreenProxy
+	public class IntroScreenProxy extends GameScreenProxy
 	{
+		//==============================================================================================================
+		// MEMBERS
+		//==============================================================================================================
+
+		protected var buttonsData								:Vector.<IButtonDataVO>;
+		protected var buttonLayout								:ButtonLayoutVO;
+
 		//==============================================================================================================
 		// CONSTRUCTOR
 		//==============================================================================================================
@@ -16,12 +25,59 @@ package test.screens.intro
 		}
 
 		//==============================================================================================================
+		// PUBLIC OVERRIDES
+		//==============================================================================================================
+
+		public override function dispose():void
+		{
+			buttonsData = null;
+			buttonLayout = null;
+			super.dispose();
+		}
+
+		//==============================================================================================================
+		// GETTERS
+		//==============================================================================================================
+
+		public function getButtonsData():Vector.<IButtonDataVO>
+		{
+			return buttonsData;
+		}
+
+		public function getButtonLayout():ButtonLayoutVO
+		{
+			return buttonLayout;
+		}
+
+		//==============================================================================================================
 		// PROTECTED OVERRIDES
 		//==============================================================================================================
 
-		protected override function parseButtonData(buttonDataXML:XML):IButtonDataVO
+		protected override function parseScreenLogicXML():void
 		{
-			return new IntroButtonDataVO(String(buttonDataXML.@screenName));
+			var testLayoutXML:XML = screenLogicXML.buttonLayout[0],
+					testButtonsList:XMLList = screenLogicXML.buttons.button;
+			// Create button layout
+			if (testLayoutXML)
+			{
+				buttonLayout = new ButtonLayoutVO(
+						parseInt(String(testLayoutXML.@fontSize)),
+						parseInt(String(testLayoutXML.@columns)),
+						parseFloat(String(testLayoutXML.@width)),
+						parseFloat(String(testLayoutXML.@height)),
+						parseFloat(String(testLayoutXML.@ellipseDimension)),
+						parseFloat(String(testLayoutXML.@horizontalGap)),
+						parseFloat(String(testLayoutXML.@verticalGap)),
+						parseFloat(String(testLayoutXML.@startX)),
+						parseFloat(String(testLayoutXML.@startY))
+				);
+			}
+			// Create button data
+			buttonsData = new Vector.<IButtonDataVO>();
+			for each (var testButtonXML:XML in testButtonsList)
+			{
+				buttonsData.push(new IntroButtonDataVO(String(testButtonXML.@screenName)));
+			}
 		}
 	}
 }

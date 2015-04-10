@@ -66,7 +66,7 @@ package stats
 			style.setStyle('ms', {color: hex2css(colors.ms)});
 			style.setStyle('mem', {color: hex2css(colors.mem)});
 			style.setStyle('memMax', {color: hex2css(colors.memmax)});
-			
+
 			text = new TextField();
 			text.width = WIDTH;
 			text.height = 50;
@@ -135,9 +135,9 @@ package stats
 				graph.setPixel(graph.width - 1, graph.height - mem_graph, colors.mem);
 				graph.setPixel(graph.width - 1, graph.height - mem_max_graph, colors.memmax);
 				
-				xml.fps = "FPS: " + fps + " / " + stage.frameRate; 
+				xml.fps = "FPS: " + fps + " / " + stage.frameRate;
 				xml.mem = "MEM: " + mem;
-				xml.memMax = "MAX: " + mem_max;			
+				xml.memMax = "MAX: " + mem_max;
 				
 				fps = 0;
 				
@@ -160,13 +160,13 @@ package stats
 		}
 		
 		// .. Utils
-		
+
 		private function hex2css( color : int ) : String {
 			
 			return "#" + color.toString(16);
-			
+
 		}
-		
+
 	}
 	
 }
