@@ -41,9 +41,6 @@ package test.screens.soundTest.view
 		// CONSTANTS
 		//==============================================================================================================
 
-		public static const STARTED_SOUND_ON_CHANNEL				:String = MEDIATOR_NAME + "_startedSoundOnChannel";
-		public static const STOPPED_SOUND_ON_CHANNEL				:String = MEDIATOR_NAME + "_stoppedSoundOnChannel";
-
 		protected static const MEDIATOR_NAME						:String = "_soundTestViewMediator";
 
 		protected static const ACTION_PLAY							:String = "play";
@@ -162,7 +159,6 @@ package test.screens.soundTest.view
 			else
 			{
 				soundPlaying = true;
-				facade.sendNotification(STARTED_SOUND_ON_CHANNEL, channelID);
 				SoundHelpers.playSound(soundID, channelID, handleSoundCompleted);
 			}
 			if (soundPlaying)
@@ -192,7 +188,6 @@ package test.screens.soundTest.view
 		{
 			soundPlaying = false;
 			enableButtons(ACTION_PLAY);
-			facade.sendNotification(STOPPED_SOUND_ON_CHANNEL, channelID);
 		}
 
 		//==============================================================================================================

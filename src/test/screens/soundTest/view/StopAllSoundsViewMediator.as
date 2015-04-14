@@ -1,11 +1,16 @@
 package test.screens.soundTest.view
 {
+	import com.pixelBender.constants.GameConstants;
+	import com.pixelBender.helpers.DictionaryHelpers;
+	import com.pixelBender.helpers.DictionaryHelpers;
 	import com.pixelBender.helpers.IDisposeHelpers;
 	import com.pixelBender.helpers.LocalizationHelpers;
 	import com.pixelBender.helpers.SoundHelpers;
 	import com.pixelBender.helpers.StarlingHelpers;
 	import com.pixelBender.interfaces.IRunnable;
 	import com.pixelBender.model.vo.game.GameSizeVO;
+	import com.pixelBender.model.vo.sound.CompleteSoundPropertiesVO;
+	import com.pixelBender.model.vo.sound.PlaySoundPropertiesVO;
 
 	import constants.Constants;
 
@@ -39,7 +44,7 @@ package test.screens.soundTest.view
 		private var name											:TextField;
 		private var container										:Sprite;
 		private var button											:TestButtonView;
-		private var playingSoundChannels							:int;
+		private var playingSoundChannels							:Dictionary;
 
 		//==============================================================================================================
 		// CONSTRUCTOR
@@ -50,6 +55,8 @@ package test.screens.soundTest.view
 		{
 			super(parentMediatorName + MEDIATOR_NAME);
 
+			playingSoundChannels = new Dictionary();
+
 			createContainer(parentContainer, setupVO, gameSize);
 			createName(parentMediatorName, setupVO, gameSize);
 			createButton(setupVO, buttonTexturesMap, gameSize);
@@ -57,7 +64,6 @@ package test.screens.soundTest.view
 
 		public function start():void
 		{
-			playingSoundChannels = 0;
 			button.start();
 			button.disable();
 		}
@@ -77,7 +83,9 @@ package test.screens.soundTest.view
 			StarlingHelpers.removeFromParent(container);
 			StarlingHelpers.removeFromParent(name);
 			IDisposeHelpers.dispose(button);
+			DictionaryHelpers.deleteValues(playingSoundChannels);
 
+			playingSoundChannels = null;
 			container = null;
 			name = null;
 			button = null;
@@ -91,8 +99,8 @@ package test.screens.soundTest.view
 		{
 			return [
 						mediatorName + TestButtonView.BUTTON_TRIGGERED,
-						SoundTestViewMediator.STARTED_SOUND_ON_CHANNEL,
-						SoundTestViewMediator.STOPPED_SOUND_ON_CHANNEL
+						GameConstants.SOUND_STARTED,
+						GameConstants.SOUND_COMPLETED
 					];
 		}
 
@@ -103,11 +111,11 @@ package test.screens.soundTest.view
 				case mediatorName + TestButtonView.BUTTON_TRIGGERED:
 					handleStopAllSounds();
 					break;
-				case SoundTestViewMediator.STARTED_SOUND_ON_CHANNEL:
-					handleChannelStarted();
+				case GameConstants.SOUND_STARTED:
+					handleChannelStarted(notification.getBody() as PlaySoundPropertiesVO);
 					break;
-				case SoundTestViewMediator.STOPPED_SOUND_ON_CHANNEL:
-					handleChannelStopped();
+				case GameConstants.SOUND_COMPLETED:
+					handleChannelStopped(notification.getBody() as CompleteSoundPropertiesVO);
 					break;
 			}
 		}
@@ -119,20 +127,19 @@ package test.screens.soundTest.view
 		private function handleStopAllSounds():void
 		{
 			SoundHelpers.stopAllSoundsOnChannels();
-			playingSoundChannels = 0;
 			button.disable();
 		}
 
-		private function handleChannelStarted():void
+		private function handleChannelStarted(playPropertiesVO:PlaySoundPropertiesVO):void
 		{
-			playingSoundChannels++;
+			playingSoundChannels[playPropertiesVO.getChannelID()] = true;
 			button.enable();
 		}
 
-		private function handleChannelStopped():void
+		private function handleChannelStopped(completePropertiesVO:CompleteSoundPropertiesVO):void
 		{
-			playingSoundChannels--;
-			if (playingSoundChannels <= 0)
+			delete playingSoundChannels[completePropertiesVO.getChannelID()];
+			if (DictionaryHelpers.dictionaryLength(playingSoundChannels) == 0)
 			{
 				button.disable();
 			}
@@ -165,6 +172,7 @@ package test.screens.soundTest.view
 			var buttonTextures:Vector.<Texture> = buttonTexturesMap[buttonLayout.getButtonLinkage()];
 			button = new TestButtonView(mediatorName, null);
 			button.createButton(container, buttonTextures[0], buttonTextures[1], gameSize.getWidth() * buttonLayout.getButtonX(), 0);
+			button.disable();
 		}
 	}
 }
