@@ -66,7 +66,7 @@ package test.facade
 			matrix.translate(((gameSize.getWidth() - Constants.WIDTH * gameSize.getScale()) >> 1), 0);
 			bitmapData.draw(stageBackgroundVector, matrix, null, null, null, true);
 
-			rootBackground = StarlingHelpers.createTextureSpriteBackground(bitmapData, bitmapData.width, bitmapData.height, true);
+			rootBackground = StarlingHelpers.createTextureSpriteBackground(bitmapData, bitmapData.width, bitmapData.height);
 			starlingGameRoot.addChildAt(rootBackground, 0);
 		}
 		
@@ -76,7 +76,7 @@ package test.facade
 		
 		override public function dispose():void
 		{
-			StarlingHelpers.disposeContainer(rootBackground);
+			StarlingHelpers.disposeTextureSprite(rootBackground);
 			rootBackground = null;
 			removeCommand(GameConstants.GLOBAL_ASSET_PACKAGE_LOADED);
 			super.dispose();

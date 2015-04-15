@@ -76,7 +76,7 @@ package test.screens.fileReferenceTest
 			var byteArray:ByteArray = new ByteArray(),
 				time:int = getTimer();
 			// Debug text
-			debugText = new TextField(gameSize.getWidth(), (gameSize.getHeight() * 0.25), "", "Tahoma", 20, 0xFFFFFF);
+			debugText = new TextField(gameSize.getWidth(), (gameSize.getHeight() * 0.25), "", Constants.APPLICATION_FONT_REGULAR, 20, 0xFFFFFF);
 			debugText.y = gameSize.getHeight() - debugText.height;
 			screen.addChild(debugText);
 			// Check if we already have a image saved to storage
@@ -92,7 +92,7 @@ package test.screens.fileReferenceTest
 				matrix.translate(((gameSize.getWidth() - Constants.WIDTH * gameSize.getScale()) >> 1), 0);
 				bitmapData.draw(vectorBackground, matrix, null, null, null, true);
 				// Create background
-				background = StarlingHelpers.createTextureSpriteBackground(bitmapData, bitmapData.width, bitmapData.height, true);
+				background = StarlingHelpers.createTextureSpriteBackground(bitmapData, bitmapData.width, bitmapData.height);
 				screen.addChildAt(background, 0);
 				Logger.debug("Normal vector draw + creating textures took:" + (getTimer()-tempTime));
 				// Save to file
@@ -112,7 +112,7 @@ package test.screens.fileReferenceTest
 				if (content != null)
 				{
 					var contentData:BitmapData = content.bitmapData;
-					background = StarlingHelpers.createTextureSpriteBackground(contentData, contentData.width, contentData.height, true);
+					background = StarlingHelpers.createTextureSpriteBackground(contentData, contentData.width, contentData.height);
 					screen.addChildAt(background, 0);
 					newTime = getTimer();
 					// Debug
@@ -161,7 +161,7 @@ package test.screens.fileReferenceTest
 		{
 			StarlingHelpers.disposeContainer(debugText, true);
 			debugText = null;
-			StarlingHelpers.disposeContainer(background, true);
+			StarlingHelpers.disposeTextureSprite(background);
 			background = null;
 			screenName = null;
 			screen = null;
@@ -179,7 +179,7 @@ package test.screens.fileReferenceTest
 				decodedBitmapData:BitmapData = backgroundBitmap.bitmapData;
 			// Add image to starling container
 			time = getTimer();
-			background = StarlingHelpers.createTextureSpriteBackground(decodedBitmapData, decodedBitmapData.width, decodedBitmapData.height, true);
+			background = StarlingHelpers.createTextureSpriteBackground(decodedBitmapData, decodedBitmapData.width, decodedBitmapData.height);
 			screen.addChildAt(background, 0);
 			newTime = getTimer();
 			// Debug

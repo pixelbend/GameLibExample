@@ -15,8 +15,11 @@ package test.popups.view
 	import flash.geom.Matrix;
 	import flash.system.ApplicationDomain;
 
+	import helpers.ButtonHelpers;
+
 	import starling.display.Button;
 	import starling.display.DisplayObjectContainer;
+	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.events.Event;
 	import starling.text.TextField;
@@ -60,6 +63,11 @@ package test.popups.view
 		 */
 		protected var mediatorName							:String;
 
+		/**
+		 * Reference to all button textures
+		 */
+		protected var buttonTextures						:Vector.<Texture>;
+
 		//==============================================================================================================
 		// CONSTRUCTOR
 		//==============================================================================================================
@@ -96,16 +104,28 @@ package test.popups.view
 
 		public function dispose():void
 		{
-			StarlingHelpers.removeFromParent(background);
-			background = null;
 			if (closeButton != null)
 			{
 				closeButton.removeEventListener(Event.TRIGGERED, handleButtonTriggered);
 				StarlingHelpers.removeFromParent(closeButton);
 				closeButton = null;
 			}
+
+			if (buttonTextures != null)
+			{
+				for (var i:int=0; i<buttonTextures.length; i++)
+				{
+					buttonTextures[i].dispose();
+					buttonTextures[i] = null;
+				}
+				buttonTextures = null;
+			}
+
+			StarlingHelpers.disposeTextureSprite(background);
 			StarlingHelpers.removeFromParent(title);
+
 			title = null;
+			background = null;
 			gameFacade = null;
 			mediatorName = null;
 		}
@@ -164,39 +184,12 @@ package test.popups.view
 
 		protected function createCloseButton(container:DisplayObjectContainer, configurationVO:PopupConfigurationVO):void
 		{
-			// Internals
-			var size:int = configurationVO.getWidth() * 0.1,
-				buttonTextures:Vector.<Texture> = getButtonTextures(2, "buttonCloseLinkage", size);
-			// Add to container
+			var size:int = configurationVO.getWidth() * 0.1;
+			buttonTextures = ButtonHelpers.getSquareButtonTextures("buttonCloseLinkage", 2, size);
 			closeButton = new Button(buttonTextures[0], "", buttonTextures[1]);
 			container.addChild(closeButton);
 			closeButton.x = configurationVO.getX() + configurationVO.getWidth() - closeButton.width - (closeButton.width >> 2);
 			closeButton.y = configurationVO.getY() + (closeButton.height >> 2);
-		}
-
-		protected static function getButtonTextures(numberOfFrames:int, buttonGraphicsLinkage:String, buttonSize:int):Vector.<Texture>
-		{
-			var buttonClass:Class,
-				buttonGraphics:MovieClip,
-				bitmapData:BitmapData,
-				matrix:Matrix = new Matrix(),
-				buttonTextures:Vector.<Texture>;
-
-			buttonClass = ApplicationDomain.currentDomain.getDefinition(buttonGraphicsLinkage) as Class;
-			buttonGraphics = new buttonClass();
-			buttonTextures = new Vector.<Texture>(numberOfFrames, true);
-
-			for (var i:int=0; i<buttonTextures.length; i++)
-			{
-				matrix.identity();
-				buttonGraphics.gotoAndStop(i+1);
-				matrix.scale(buttonSize/buttonGraphics.width, buttonSize/buttonGraphics.height);
-				bitmapData = new BitmapData(buttonSize, buttonSize, true, 0x00000000);
-				bitmapData.draw(buttonGraphics, matrix, null, null, null, true);
-				buttonTextures[i] = Texture.fromBitmapData(bitmapData, false);
-			}
-
-			return buttonTextures;
 		}
 	}
 }

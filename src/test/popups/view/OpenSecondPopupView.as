@@ -39,6 +39,11 @@ package test.popups.view
 		 */
 		protected var mediatorName						:String;
 
+		/**
+		 * Reference to texture
+		 */
+		protected var buttonTexture						:Texture;
+
 		//==============================================================================================================
 		// CONSTRUCTOR
 		//==============================================================================================================
@@ -80,6 +85,11 @@ package test.popups.view
 				StarlingHelpers.removeFromParent(button);
 				button = null;
 			}
+			if (buttonTexture != null)
+			{
+				buttonTexture.dispose();
+				buttonTexture = null;
+			}
 			gameFacade = null;
 			mediatorName = null;
 		}
@@ -112,8 +122,7 @@ package test.popups.view
 			var vectorSprite:Sprite = new Sprite(),
 				width:int = configurationVO.getWidth() >> 2,
 				height:int = configurationVO.getHeight() >> 2,
-				bitmapData:BitmapData = new BitmapData(width, height, true, 0x0),
-				buttonTexture:Texture;
+				bitmapData:BitmapData = new BitmapData(width, height, true, 0x0);
 			// Draw from vector
 			vectorSprite.graphics.beginFill(0x005555, 1);
 			vectorSprite.graphics.drawRoundRect(0, 0, width, height, width * .1);
