@@ -76,7 +76,7 @@ package test.screens.fileReferenceTest
 			var byteArray:ByteArray = new ByteArray(),
 				time:int = getTimer();
 			// Debug text
-			debugText = new TextField(gameSize.getWidth(), (gameSize.getHeight() * 0.25), "", Constants.APPLICATION_FONT_REGULAR, 20, 0xFFFFFF);
+			debugText = new TextField(gameSize.getWidth(), (gameSize.getHeight() * 0.25), "", "Verdana", 20, 0xFFFFFF);
 			debugText.y = gameSize.getHeight() - debugText.height;
 			screen.addChild(debugText);
 			// Check if we already have a image saved to storage
