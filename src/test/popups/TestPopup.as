@@ -39,8 +39,9 @@ package test.popups
 		 * Create views and show them
 		 * @param container
 		 * @param assetProxy
+		 * @param popupInitVO
 		 */
-		public override function prepareForOpen(container:DisplayObjectContainer, assetProxy:AssetProxy):void
+		public override function prepareForOpen(container:DisplayObjectContainer, assetProxy:AssetProxy, popupInitVO:Object=null):void
 		{
 			backgroundView = new PopupBaseView(container, testPopupProxy.getConfigurationVO(), mediatorName, gameFacade);
 		}

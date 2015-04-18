@@ -33,8 +33,9 @@ package test.popups
 		 * Create views and show them
 		 * @param container
 		 * @param assetProxy
+		 * @param popupInitVO
 		 */
-		public override function prepareForOpen(container:DisplayObjectContainer, assetProxy:AssetProxy):void
+		public override function prepareForOpen(container:DisplayObjectContainer, assetProxy:AssetProxy, popupInitVO:Object=null):void
 		{
 			super.prepareForOpen(container, assetProxy);
 			openSecondPopupView = new OpenSecondPopupView(container, testPopupProxy.getConfigurationVO(), mediatorName, gameFacade);

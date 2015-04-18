@@ -11,7 +11,6 @@ package test.screens.fileReferenceTest
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.IBitmapDrawable;
-	import flash.display.JPEGEncoderOptions;
 	import flash.display.PNGEncoderOptions;
 	import flash.geom.Matrix;
 	import flash.utils.ByteArray;
@@ -102,7 +101,7 @@ package test.screens.fileReferenceTest
 				newTime = getTimer();
 				Logger.debug("Saving file to disk. Time:", (newTime - time));
 				debugText.text = "Background was not in file system. Will be transformed in Bitmap from vector form and saved to file disk. " +
-									"The entire process took:" + (newTime - time) + "ms";
+									"The entire process took: " + (newTime - time) + " ms";
 				// Done
 				return true;
 			}
@@ -117,7 +116,7 @@ package test.screens.fileReferenceTest
 					newTime = getTimer();
 					// Debug
 					Logger.debug("Background bitmap data found in cache. Texture creation took:", (newTime - time));
-					debugText.text = "Background Bitmap already in cache. Creating a texture out of it took:" + (newTime - time) + "ms";
+					debugText.text = "Background Bitmap already in cache. Creating a texture out of it took: " + (newTime - time) + " ms";
 					return true;
 				}
 				else
@@ -184,7 +183,7 @@ package test.screens.fileReferenceTest
 			newTime = getTimer();
 			// Debug
 			Logger.debug("Background loaded from disk. Texture creation took:", (newTime - time) );
-			debugText.text = "Background Bitmap in file contents. The bitmapData was loaded. Creating a texture out of it took:" + (newTime - time) + "ms";
+			debugText.text = "Background Bitmap in file contents. The bitmapData was loaded. Creating a texture out of it took: " + (newTime - time) + " ms";
 			// Notify the game screen it's background is ready
 			sendNotification(BACKGROUND_CREATED, screenName);
 		}
