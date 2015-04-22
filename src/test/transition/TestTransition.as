@@ -5,8 +5,13 @@ package test.transition
 	import com.pixelBender.model.vo.game.GameSizeVO;
 	import com.pixelBender.update.FrameUpdateManager;
 	import com.pixelBender.view.transition.TransitionView;
+
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+
+	import starling.display.Image;
 	import starling.display.Sprite;
+
 	import test.facade.TestGameFacade;
 
 	public class TestTransition extends TransitionView implements IFrameUpdate
@@ -15,7 +20,7 @@ package test.transition
 		// STATIC CONSTANTS
 		//==============================================================================================================
 
-		protected static const TRANSITION_TIME								:int = 500; // in ms
+		protected static const TRANSITION_TIME								:int = 200; // in ms
 
 		//==============================================================================================================
 		// STATIC MEMBERS
@@ -46,13 +51,20 @@ package test.transition
 
 		public function TestTransition(name:String)
 		{
+			const imageSize:int = 128;
 			super(name);
 			updateManager = FrameUpdateManager.getInstance();
 			if (transitionView == null)
 			{
 				var gameSize:GameSizeVO = TestGameFacade.getInstance().getApplicationSize(),
-					bitmapData:BitmapData = new BitmapData(gameSize.getWidth(), gameSize.getHeight(), false, 0xBBBBBB);
-				transitionView = StarlingHelpers.createTextureSprite(bitmapData, gameSize.getWidth(), gameSize.getHeight(), true);
+					bitmapData:BitmapData = new BitmapData(imageSize, imageSize, false, 0xBBBBBB),
+					image:Image = Image.fromBitmap(new Bitmap(bitmapData));
+
+				transitionView = new Sprite();
+				transitionView.addChild(image);
+				// Scale to appropriate dimensions
+				image.scaleX = gameSize.getWidth() >> 7;
+				image.scaleY = gameSize.getHeight() >> 7;
 			}
 			starlingTransitionViewComponent = transitionView;
 		}
@@ -76,7 +88,7 @@ package test.transition
 			super.dispose();
 			if (transitionView != null)
 			{
-				StarlingHelpers.disposeContainer(transitionView, true);
+				StarlingHelpers.disposeTextureSprite(transitionView);
 				transitionView = null;
 			}
 			updateManager = null;
