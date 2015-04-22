@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <logic>
+    <!-- Custom assets -->
+    <customAssetLoaderVOPairs>
+        <customAssetLoaderVOPair name="myImage" loaderClassName="test.model.asset.MyImageLoader" voClassName="test.model.asset.MyImageAssetVO" />
+    </customAssetLoaderVOPairs>
 	<!-- Game screens -->
 	<gameScreens>
 		<gameScreen 	name="_game__introScreen" 	            className="test.screens.intro.IntroScreen" />

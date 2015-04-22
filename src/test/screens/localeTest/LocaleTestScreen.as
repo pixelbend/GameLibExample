@@ -167,7 +167,7 @@ package test.screens.localeTest
 			const 	gameSize:GameSizeVO = gameFacade.getApplicationSize(),
 					halfScreenWidth:int = gameSize.getWidth() >> 1,
 					halfScreenHeight:int = gameSize.getHeight() >> 1,
-					picture:Bitmap = gameScreenProxy.getScreenAssetPackage().getAsset("picture").getContent() as Bitmap;
+					picture:Bitmap = gameScreenProxy.getScreenAssetPackage().getImageAsset("picture").getImage();
 
 			languageImage = Image.fromBitmap(picture);
 			languageImage.x = halfScreenWidth;

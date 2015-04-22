@@ -1,7 +1,8 @@
 package constants
 {
 	import flash.text.Font;
-
+	import test.model.asset.MyImageAssetVO;
+	import test.model.asset.MyImageLoader;
 	import test.popups.FirstPopup;
 	import test.popups.TestPopup;
 	import test.screens.fileReferenceTest.FileReferenceTestScreen;
@@ -56,6 +57,10 @@ package constants
 		// Popups
 		TestPopup;
 		FirstPopup;
+
+		// Assets
+		MyImageLoader;
+		MyImageAssetVO;
 
 		// Embedded graphics
 		buttonLinkage;
