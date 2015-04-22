@@ -20,7 +20,7 @@ package test.transition
 		// STATIC CONSTANTS
 		//==============================================================================================================
 
-		protected static const TRANSITION_TIME								:int = 200; // in ms
+		protected static const TRANSITION_TIME								:int = 300; // in ms
 
 		//==============================================================================================================
 		// STATIC MEMBERS
@@ -51,7 +51,8 @@ package test.transition
 
 		public function TestTransition(name:String)
 		{
-			const imageSize:int = 128;
+			const 	imageSize:int = 128,
+					invertedSize:Number = 1 / imageSize;
 			super(name);
 			updateManager = FrameUpdateManager.getInstance();
 			if (transitionView == null)
@@ -62,9 +63,9 @@ package test.transition
 
 				transitionView = new Sprite();
 				transitionView.addChild(image);
-				// Scale to appropriate dimensions
-				image.scaleX = gameSize.getWidth() >> 7;
-				image.scaleY = gameSize.getHeight() >> 7;
+
+				image.scaleX = gameSize.getWidth() * invertedSize;
+				image.scaleY = gameSize.getHeight() * invertedSize;
 			}
 			starlingTransitionViewComponent = transitionView;
 		}
