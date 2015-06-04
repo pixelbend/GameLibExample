@@ -8,8 +8,11 @@ package test.transition
 
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.DisplayObjectContainer;
+	import flash.display.PixelSnapping;
 
 	import starling.display.Image;
+	import starling.display.DisplayObjectContainer;
 	import starling.display.Sprite;
 
 	import test.facade.TestGameFacade;
@@ -51,23 +54,8 @@ package test.transition
 
 		public function TestTransition(name:String)
 		{
-			const 	imageSize:int = 128,
-					invertedSize:Number = 1 / imageSize;
 			super(name);
 			updateManager = FrameUpdateManager.getInstance();
-			if (transitionView == null)
-			{
-				var gameSize:GameSizeVO = TestGameFacade.getInstance().getApplicationSize(),
-					bitmapData:BitmapData = new BitmapData(imageSize, imageSize, false, 0xBBBBBB),
-					image:Image = Image.fromBitmap(new Bitmap(bitmapData));
-
-				transitionView = new Sprite();
-				transitionView.addChild(image);
-
-				image.scaleX = gameSize.getWidth() * invertedSize;
-				image.scaleY = gameSize.getHeight() * invertedSize;
-			}
-			starlingTransitionViewComponent = transitionView;
 		}
 
 		//==============================================================================================================
@@ -83,6 +71,13 @@ package test.transition
 		//==============================================================================================================
 		// API OVERRIDES
 		//==============================================================================================================
+
+		public override function addViewComponentParents(parent:flash.display.DisplayObjectContainer,
+														 	starlingParent:starling.display.DisplayObjectContainer):void
+		{
+			createTransitionView();
+			super.addViewComponentParents(parent, starlingParent);
+		}
 
 		public override function dispose():void
 		{
@@ -136,6 +131,26 @@ package test.transition
 		//==============================================================================================================
 		// OVERRIDES
 		//==============================================================================================================
+
+		protected function createTransitionView():void
+		{
+			const 	imageSize:int = 128,
+					invertedSize:Number = 1 / imageSize;
+
+			if (transitionView == null)
+			{
+				var gameSize:GameSizeVO = TestGameFacade.getInstance().getApplicationSize(),
+					bitmapData:BitmapData = new BitmapData(imageSize, imageSize, false, 0xBBBBBB),
+					image:Image = Image.fromBitmap(new Bitmap(bitmapData, PixelSnapping.AUTO, true));
+
+				transitionView = new Sprite();
+				transitionView.addChild(image);
+
+				image.scaleX = gameSize.getWidth() * invertedSize;
+				image.scaleY = gameSize.getHeight() * invertedSize;
+			}
+			starlingTransitionViewComponent = transitionView;
+		}
 
 		protected function updateTransition():void
 		{

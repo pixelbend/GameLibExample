@@ -1,5 +1,6 @@
 package
 {
+	import com.mesmotronic.ane.AndroidFullScreen;
 	import com.pixelBender.constants.GameConstants;
 	import com.pixelBender.interfaces.IRunnable;
 
@@ -174,21 +175,24 @@ package
 		// HANDLERS
 		//==============================================================================================================
 
-		private function handleAddedToStage(e:flash.events.Event):void
+		private function handleAddedToStage(event:flash.events.Event):void
 		{
 			// Remove listener
 			this.removeEventListener(flash.events.Event.ADDED_TO_STAGE, handleAddedToStage);
 			init();
 		}
 
-		private function handleStageResize(e:flash.events.Event):void
+		private function handleStageResize(event:flash.events.Event):void
 		{
-			Starling.current.viewPort = new Rectangle(0, 0, stage.fullScreenWidth, stage.fullScreenHeight);
-			gameStarling.stage.stageWidth = stage.fullScreenWidth;
-			gameStarling.stage.stageHeight = stage.fullScreenHeight;
+			var screenWidth:int = stage.stageWidth,
+				screenHeight:int = stage.stageHeight;
+
+			Starling.current.viewPort = new Rectangle(0, 0, screenWidth, screenHeight);
+			gameStarling.stage.stageWidth = screenWidth;
+			gameStarling.stage.stageHeight = screenHeight;
 			if (gameFacade != null)
 			{
-				gameFacade.handleGameResized(stage.fullScreenWidth, stage.fullScreenHeight, stage.fullScreenHeight/Constants.HEIGHT);
+				gameFacade.handleGameResized(screenWidth, screenHeight, screenHeight/Constants.HEIGHT);
 			}
 		}
 
@@ -238,6 +242,19 @@ package
 			initializeFacade();
 			// Force resize on initial values
 			handleStageResize(null);
+			// Try Android full screen
+			CONFIG::mobile
+			{
+				if (AndroidFullScreen.isSupported)
+				{
+					// Try full fledged immersive fullscreen
+					if (!AndroidFullScreen.immersiveMode())
+					{
+						 // Fallback for older OS versions
+						 AndroidFullScreen.leanMode();
+					}
+				}
+			}
 		}
 
 		private function handleGameReady():void
@@ -273,6 +290,8 @@ package
 				stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeys, false, 0, true);
 				NativeApplication.nativeApplication.addEventListener(flash.events.Event.DEACTIVATE, handleDeactivate, false, 0, true);
 				NativeApplication.nativeApplication.addEventListener(flash.events.Event.ACTIVATE, handleActivate, false, 0, true);
+
+
 			}
 			// Import linkages
 			new Linkages();
